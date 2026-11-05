@@ -1,0 +1,78 @@
+---
+import { empresa } from "../data/empresa";
+
+const links = [
+  { href: "#casos", t: "Casos" },
+  { href: "#proceso", t: "Cómo trabajamos" },
+  { href: "#contacto", t: "Contacto" },
+];
+---
+
+<nav
+  aria-label="Principal"
+  class="sticky top-0 z-50 border-b border-edge bg-bg/90 pt-[env(safe-area-inset-top)] backdrop-blur"
+>
+  <div class="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-6 py-3 md:px-12">
+    <div class="flex items-center gap-4">
+      <a href="#hero" class="text-[22px] font-semibold tracking-tight">{empresa.nombre}</a>
+      {
+        empresa.datosDeEjemplo && (
+          <span class="hidden rounded-full border border-edge px-3 py-1 text-sm font-semibold text-muted lg:inline">
+            Vista previa con datos de ejemplo
+          </span>
+        )
+      }
+    </div>
+
+    <div class="hidden items-center gap-8 md:flex">
+      {links.map((l) => <a href={l.href} class="text-base hover:underline">{l.t}</a>)}
+      <a
+        href="#contacto"
+        class="inline-flex min-h-11 items-center rounded-lg bg-acento px-5 font-semibold text-acento-fg"
+      >
+        Cotizar
+      </a>
+    </div>
+
+    <button
+      id="menu-btn"
+      type="button"
+      class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-edge md:hidden"
+      aria-expanded="false"
+      aria-controls="menu"
+      aria-label="Abrir menú"
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div id="menu" hidden class="border-t border-edge px-6 pb-6 pt-2 md:hidden">
+    <div class="flex flex-col">
+      {links.map((l) => <a href={l.href} class="border-b border-edge py-4 text-lg font-medium">{l.t}</a>)}
+      <a
+        href="#contacto"
+        class="mt-4 inline-flex min-h-12 items-center justify-center rounded-lg bg-acento px-5 text-[17px] font-semibold text-acento-fg"
+      >
+        Cotizar
+      </a>
+      {empresa.datosDeEjemplo && <p class="mt-4 text-sm text-muted">Vista previa con datos de ejemplo</p>}
+    </div>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById("menu-btn")!;
+  const menu = document.getElementById("menu")!;
+  function set(open: boolean) {
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+    btn.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+  }
+  btn.addEventListener("click", () => set(menu.hidden));
+  menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => set(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") set(false);
+  });
+</script>

@@ -1,0 +1,95 @@
+---
+import { empresa } from "../data/empresa";
+---
+
+<section id="contacto" class="border-t border-edge bg-card">
+  <div class="mx-auto grid max-w-[1240px] items-center gap-12 px-6 py-24 md:px-12 lg:grid-cols-2 lg:gap-20">
+    <div>
+      <h2 class="max-w-[14ch] text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-tight">
+        Pide tu cotización
+      </h2>
+      <p class="mt-4 max-w-[40ch] text-lg leading-relaxed text-muted">
+        Te respondemos por WhatsApp en menos de 2 horas hábiles.
+      </p>
+      <ul class="mt-8 flex flex-col gap-4 text-[17px]">
+        <li class="flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-full bg-lima text-bosque">
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"></path>
+            </svg>
+          </span>
+          {empresa.telefono}
+        </li>
+        <li class="flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-full bg-lima text-bosque">
+            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+          </span>
+          {empresa.horario}
+        </li>
+      </ul>
+    </div>
+
+    <form
+      id="form-cotiza"
+      data-wa={empresa.whatsapp}
+      class="flex flex-col gap-4 rounded-2xl border border-edge bg-white p-8 text-pino shadow-sm"
+    >
+      <label class="flex flex-col gap-1.5 text-base font-medium">
+        Nombre
+        <input
+          name="nombre"
+          type="text"
+          required
+          autocomplete="name"
+          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3.5 text-[17px]"
+        />
+      </label>
+      <label class="flex flex-col gap-1.5 text-base font-medium">
+        WhatsApp
+        <input
+          name="telefono"
+          type="tel"
+          required
+          inputmode="tel"
+          autocomplete="tel"
+          pattern="[0-9 +()\-]{10,16}"
+          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3.5 text-[17px]"
+        />
+      </label>
+      <label class="flex flex-col gap-1.5 text-base font-medium">
+        Municipio
+        <select
+          name="municipio"
+          required
+          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3 text-[17px]"
+        >
+          <option value="">Elige tu municipio</option>
+          {empresa.zona.map((z) => <option value={z}>{z}</option>)}
+          <option value="Otro">Otro</option>
+        </select>
+      </label>
+      <button
+        type="submit"
+        class="min-h-12 cursor-pointer rounded-lg bg-bosque px-5 text-[17px] font-semibold text-white"
+      >
+        Solicitar cotización
+      </button>
+      <p class="text-sm leading-snug text-[#2d3b37]">
+        Al enviar aceptas el <a href="#" class="underline">aviso de privacidad</a>.
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("form-cotiza") as HTMLFormElement;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const msg = `Hola, soy ${d.get("nombre")} de ${d.get("municipio")}. Quiero cotizar paneles solares. Mi WhatsApp: ${d.get("telefono")}.`;
+    window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+  });
+</script>

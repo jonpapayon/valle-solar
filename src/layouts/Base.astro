@@ -1,0 +1,69 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-bg font-sans text-fg antialiased">
+    <a
+      href="#hero"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-acento focus:px-4 focus:py-2 focus:text-acento-fg"
+    >
+      Saltar al contenido
+    </a>
+    <slot />
+  </body>
+</html>
+
+<script>
+  import { animate } from "animejs";
+
+  const selectores = [
+    "#casos .grid > div:first-child",
+    "#casos a",
+    "#proceso h2",
+    "#proceso li",
+    "#contacto .grid > div:first-child",
+    "#contacto form",
+  ].join(",");
+
+  const els = document.querySelectorAll<HTMLElement>(selectores);
+
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    els.forEach((e) => (e.style.opacity = "1"));
+  } else {
+    const io = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const e = en.target as HTMLElement;
+          io.unobserve(e);
+          const i = Array.from(e.parentElement!.children).indexOf(e);
+          animate(e, { opacity: [0, 1], y: [28, 0], duration: 700, delay: i * 90, ease: "outExpo" });
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+    els.forEach((e) => io.observe(e));
+  }
+</script>

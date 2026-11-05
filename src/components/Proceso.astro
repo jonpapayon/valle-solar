@@ -1,0 +1,25 @@
+---
+const pasos = [
+  { t: "Cotizas", d: "Con tu recibo, en el sitio o por WhatsApp." },
+  { t: "Visita técnica", d: "Medimos tu techo y confirmamos el sistema. Sin costo." },
+  { t: "Instalamos", d: "Cuadrillas propias, en pocos días." },
+  { t: "Trámite con CFE", d: "Nos encargamos de la interconexión y del arranque." },
+];
+---
+
+<section id="proceso" class="bg-bosque text-white">
+  <div class="mx-auto max-w-[1240px] px-6 py-24 md:px-12">
+    <h2 class="text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-tight">Así trabajamos</h2>
+    <ol class="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        pasos.map((p, i) => (
+          <li class="border-t border-white/25 pt-6">
+            <div class="text-4xl font-semibold text-lima">{i + 1}</div>
+            <h3 class="mt-2 text-[22px] font-semibold">{p.t}</h3>
+            <p class="mt-1 text-[17px] leading-relaxed text-[#d5e0db]">{p.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import { empresa } from "../data/empresa";
+---
+
+<footer class="bg-pino text-[#d5e0db]">
+  <div class="mx-auto flex max-w-[1240px] flex-wrap justify-between gap-8 px-6 py-12 text-base leading-relaxed md:px-12">
+    <div>
+      <div class="text-[22px] font-semibold text-white">{empresa.nombre}</div>
+      {empresa.ciudad}
+    </div>
+    <div>
+      {empresa.telefono}<br />
+      {empresa.correo}<br />
+      {empresa.horario}
+    </div>
+    <div>{empresa.lema}</div>
+  </div>
+  <div class="mx-auto max-w-[1240px] border-t border-white/15 px-6 py-5 text-sm md:px-12">
+    © {new Date().getFullYear()} {empresa.nombre}.{empresa.datosDeEjemplo && " Datos de ejemplo."}
+  </div>
+</footer>

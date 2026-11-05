@@ -1,0 +1,26 @@
+export const empresa = {
+  datosDeEjemplo: true,
+  nombre: "Valle Solar",
+  lema: "Energía inteligente. Un futuro más eficiente.",
+  ciudad: "Zamora de Hidalgo, Michoacán",
+  zona: ["Zamora", "Jacona", "Tangancícuaro", "Sahuayo", "Jiquilpan", "La Piedad"],
+  telefono: "351 000 0000",
+  whatsapp: "523510000000",
+  correo: "contacto@ejemplo.mx",
+  horario: "Lun a Sáb, 9:00 a 18:00",
+  metricas: {
+    sistemas: 420,
+    calificacion: 4.9,
+    resenas: 86,
+    cuadrillas: 4,
+    garantiaPaneles: 25,
+  },
+  calculo: {
+    tarifa: 4.2,
+    horasSol: 5.2,
+    eficiencia: 0.8,
+    potenciaPanelW: 550,
+    ahorroMin: 0.85,
+    ahorroMax: 0.92,
+  },
+};
