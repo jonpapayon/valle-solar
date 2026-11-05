@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { empresa } from "../data/empresa";
 
 interface Props {
   title: string;
@@ -16,6 +17,7 @@ const { title, description = "" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {empresa.datosDeEjemplo && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
