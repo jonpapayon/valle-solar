@@ -8,7 +8,10 @@
  * Parámetros técnicos: src/config/calculadora.ts (pendientes de validación).
  */
 import { empresa } from "../data/empresa";
-import { parametrosCalculo } from "../config/calculadora";
+import { parametrosCalculo, rangoPanelesW, generacionPanelKwhDia } from "../config/calculadora";
+import { formatoNumero } from "../lib/calculo";
+
+const genPanel = formatoNumero(generacionPanelKwhDia, 2);
 
 // Geometría del plano (viewBox 720 × 322). Techo a dos aguas visto desde arriba; cumbrera horizontal.
 const TECHO = { x: 60, y: 38, w: 600, h: 252 };
@@ -129,7 +132,8 @@ const ranuras = filas.flatMap((y) => Array.from({ length: COLS }, (_, c) => ({ x
     </div>
     <div class="celda xl:col-span-2">
       <label for="calc-municipio" class="celda-rotulo">Municipio <span class="font-normal text-tinta-2">· opcional</span></label>
-      <input id="calc-municipio" name="municipio" type="text" autocomplete="address-level2" class="campo mt-2" />
+      <input id="calc-municipio" name="municipio" type="text" autocomplete="address-level2" list="calc-municipios" class="campo mt-2" />
+      <datalist id="calc-municipios">{empresa.municipios.map((m) => <option value={m} />)}</datalist>
     </div>
   </div>
 
@@ -165,8 +169,10 @@ const ranuras = filas.flatMap((y) => Array.from({ length: COLS }, (_, c) => ({ x
         </div>
       </details>
     <p class="text-[0.8125rem] leading-snug text-tinta-2">
-      Estimación orientativa calculada solo con tu consumo. No es un dimensionamiento ni una cotización: el sistema y
-      el precio se definen al revisar tu inmueble.
+      Estimación orientativa con tu consumo y un panel de referencia de {parametrosCalculo.potenciaPanelW} W (≈ {genPanel} kWh/día
+      cada uno). No es una garantía de generación, un dimensionamiento ni una cotización: el sistema y el precio se
+      definen al revisar tu inmueble. Según disponibilidad se instalan paneles de {rangoPanelesW.min} a {rangoPanelesW.max} W, lo
+      que puede cambiar el número de paneles.
     </p>
   </div>
 </form>

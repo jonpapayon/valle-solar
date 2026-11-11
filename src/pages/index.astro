@@ -11,7 +11,7 @@ import Contacto from "../components/Contacto.astro";
 import { empresa } from "../data/empresa";
 
 const title = `${empresa.nombre}: paneles solares interconectados a CFE en ${empresa.region}`;
-const description = `Instalación de sistemas fotovoltaicos interconectados a la red de CFE para casas y negocios en ${empresa.region}. Calcula el tamaño aproximado con tu consumo en kWh y cotiza por WhatsApp.`;
+const description = `Paneles solares interconectados a CFE, también híbridos con baterías, para casas y negocios en Zamora, Morelia y otros municipios de ${empresa.region}. Cotiza por WhatsApp.`;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -19,7 +19,7 @@ const jsonLd = {
   name: empresa.nombre,
   description: empresa.servicio,
   telephone: `+${empresa.whatsapp.numero}`,
-  areaServed: { "@type": "State", name: empresa.region },
+  areaServed: empresa.municipios.map((m) => ({ "@type": "City", name: `${m}, ${empresa.region}` })),
   ...(Astro.site ? { url: Astro.site.href } : {}),
 };
 ---

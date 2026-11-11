@@ -116,6 +116,10 @@ const { casa: fotoCasa, negocio: fotoNegocio } = sitio.fotos;
             <div><dt>Recibo</dt><dd>Mensual o bimestral</dd></div>
             <div><dt>Dato clave</dt><dd>Consumo en kWh</dd></div>
           </dl>
+          <p class="solucion-nota">
+            En algunos proyectos comerciales, industriales o con características eléctricas particulares puede
+            requerirse una verificación UVIE y trámites adicionales. Lo revisamos contigo en la visita técnica.
+          </p>
           <a href={waNegocio} class="btn btn-secundario mt-8 self-start">Cotizar mi negocio por WhatsApp</a>
         </div>
       </article>
@@ -232,6 +236,13 @@ const { casa: fotoCasa, negocio: fotoNegocio } = sitio.fotos;
     color: var(--color-tinta-2);
   }
   .solucion-oscura .solucion-datos dt { color: #c9c4b8; }
+  .solucion-nota {
+    margin-top: 1.25rem;
+    max-width: 34rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #dedad0;
+  }
   .solucion-datos dd {
     margin-top: 0.25rem;
     font-size: 0.9688rem;

@@ -1,17 +1,10 @@
 /**
- * Datos de la empresa. Aquí solo van datos CONFIRMADOS por el propietario.
- *
- * Pendientes de validar (no se publican hasta tenerlos):
- * - Municipios concretos de cobertura (hoy solo "Michoacán").
- * - Si se ofrecen sistemas interconectados con almacenamiento (baterías).
- * - Esquema(s) de interconexión con los que se trabaja.
- * - Quién gestiona el trámite de interconexión con CFE.
- * - Costo de la visita técnica, tiempos de instalación y de respuesta.
- * - Horario, correo, dirección, razón social, logotipo, fotografías propias.
+ * Datos de la empresa. Aquí solo van datos CONFIRMADOS por el responsable (última actualización: 10 nov 2026).
+ * La lista completa de datos confirmados y pendientes está en docs/datos-del-negocio.md.
  */
 export const empresa = {
   nombre: "Solar Service Mx",
-  servicio: "Instalación de sistemas fotovoltaicos interconectados a la red de CFE",
+  servicio: "Instalación de sistemas fotovoltaicos interconectados a la red de CFE, también híbridos con baterías",
   region: "Michoacán",
   whatsapp: {
     /** Formato para mostrar en pantalla. */
@@ -20,4 +13,42 @@ export const empresa = {
     numero: "523317061726",
   },
   atiende: "el responsable comercial y técnico",
+
+  /** Lo que se instala. */
+  servicios: [
+    "Sistemas fotovoltaicos interconectados a la red de CFE",
+    "Sistemas híbridos con baterías, interconectados a la red",
+  ],
+  /** Lo que no se ofrece. */
+  noOfrece: ["Sistemas autónomos, aislados de la red", "Sistemas de bombeo solar"],
+
+  /** Gestión incluida. */
+  gestion: {
+    tramiteCfe: "Gestionamos el trámite de interconexión ante CFE; está incluido en la cotización.",
+    visitaTecnica: "La visita técnica no tiene costo adicional.",
+  },
+
+  /** Municipios atendidos (confirmados). Zamora y Morelia son las bases de referencia. */
+  municipios: [
+    "Zamora",
+    "Jacona",
+    "Tangancícuaro",
+    "Chilchota",
+    "Purépero",
+    "Zacapu",
+    "Los Reyes",
+    "Cotija",
+    "Sahuayo",
+    "La Piedad",
+    "Uruapan",
+    "Morelia",
+    "Charo",
+    "Pátzcuaro",
+    "Quiroga",
+  ],
+  /**
+   * Referencia aproximada que da la empresa: alrededor de 80 km desde Zamora y 40 km desde Morelia.
+   * NO es una garantía de cobertura: fuera de la lista se confirma caso por caso.
+   */
+  coberturaAproximada: "alrededor de 80 km desde Zamora y 40 km desde Morelia",
 } as const;

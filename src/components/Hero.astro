@@ -33,9 +33,9 @@ const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Quiero
       </div>
 
       <dl class="ficha mt-10 lg:mt-auto lg:pt-10" style="--i:4">
-        <div><dt>Servicio</dt><dd>Solo sistemas interconectados a CFE</dd></div>
+        <div><dt>Servicio</dt><dd>Interconectados a CFE, también híbridos con baterías</dd></div>
         <div><dt>Clientes</dt><dd>Casas y negocios</dd></div>
-        <div><dt>Cobertura</dt><dd>{empresa.region}</dd></div>
+        <div><dt>Cobertura</dt><dd><a href="#cobertura" class="enlace inline-flex min-h-11 items-center">Zamora, Morelia y {empresa.municipios.length - 2} municipios más</a></dd></div>
         <div>
           <dt>WhatsApp</dt>
           <dd><a href={wa} class="enlace inline-flex min-h-11 items-center font-mono font-medium" data-wa-general>{empresa.whatsapp.visible}</a></dd>

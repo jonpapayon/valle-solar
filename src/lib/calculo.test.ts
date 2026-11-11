@@ -60,3 +60,16 @@ test("urlWhatsApp codifica el texto y usa el número oficial", () => {
   assert.equal(urlWhatsApp("523317061726"), "https://wa.me/523317061726");
   assert.equal(urlWhatsApp("523317061726", "Hola, ¿qué tal?"), "https://wa.me/523317061726?text=Hola%2C%20%C2%BFqu%C3%A9%20tal%3F");
 });
+
+test("parámetros confirmados: panel de 630 W ≈ 2.62 kWh/día", async () => {
+  const { parametrosCalculo, generacionPanelKwhDia, rangoPanelesW } = await import("../config/calculadora.ts");
+  assert.equal(parametrosCalculo.potenciaPanelW, 630);
+  assert.equal(parametrosCalculo.horasSolPico, 5.2);
+  assert.equal(parametrosCalculo.factorRendimiento, 0.8);
+  assert.equal(generacionPanelKwhDia.toFixed(2), "2.62");
+  assert.deepEqual({ ...rangoPanelesW }, { min: 630, max: 715 });
+  // 1,150 kWh bimestrales → 19.2 kWh/día → 4.6 kWp → 8 paneles de 630 W
+  const e = estimarSistema(1150, "bimestral", parametrosCalculo)!;
+  assert.equal(e.paneles, 8);
+  assert.equal(e.potenciaPanelW, 630);
+});

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="lienzo" content="1080x1080">
+<title>01 · El recibo de luz · 1080×1080</title>
+<link rel="stylesheet" href="../../fuentes/marca.css">
+<style>
+  :root { --w: 1080px; --h: 1080px; }
+  body { background: var(--cal); color: var(--basalto); }
+  .cabecera { position: absolute; left: 72px; right: 72px; top: 64px; display: flex; justify-content: space-between; align-items: center; }
+  .cabecera .etiqueta { color: var(--tinta-2); }
+
+  h1 {
+    position: absolute; left: 72px; top: 172px; width: 600px;
+    font-family: var(--serif); font-weight: 400; font-size: 124px; line-height: 0.9; letter-spacing: -0.025em;
+  }
+  h1 em { color: var(--valle); }
+  .bajada {
+    position: absolute; left: 72px; top: 566px; width: 540px;
+    font-size: 27px; line-height: 1.42; color: var(--tinta-2);
+  }
+
+  /* Recibo de papel */
+  .recibo {
+    position: absolute; left: 690px; top: 176px; width: 318px; height: 556px;
+    filter: drop-shadow(0 0 0.8px rgb(22 21 15 / 0.85)) drop-shadow(12px 12px 0 #e2dccd);
+  }
+  .recibo-papel {
+    position: absolute; inset: 0; background: #fbfaf6;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), 95.833% 100%, 91.667% calc(100% - 16px), 87.500% 100%, 83.333% calc(100% - 16px), 79.167% 100%, 75.000% calc(100% - 16px), 70.833% 100%, 66.667% calc(100% - 16px), 62.500% 100%, 58.333% calc(100% - 16px), 54.167% 100%, 50.000% calc(100% - 16px), 45.833% 100%, 41.667% calc(100% - 16px), 37.500% 100%, 33.333% calc(100% - 16px), 29.167% 100%, 25.000% calc(100% - 16px), 20.833% 100%, 16.667% calc(100% - 16px), 12.500% 100%, 8.333% calc(100% - 16px), 4.167% 100%, 0.000% calc(100% - 16px));
+    padding: 26px 26px 0;
+  }
+  .recibo-cab { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 19px; font-weight: 500; padding-bottom: 16px; border-bottom: 1.5px solid var(--basalto); }
+  .recibo-cab span:last-child { color: var(--tinta-2); font-weight: 400; }
+  .fila { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 10px; margin-top: 22px; font-family: var(--mono); font-size: 18px; color: var(--tinta-2); }
+  .fila i { border-bottom: 2px dotted rgb(22 21 15 / 0.35); height: 1px; transform: translateY(-6px); }
+  .barra { height: 14px; border-radius: 2px; background: rgb(22 21 15 / 0.12); }
+  .total { margin-top: 30px; padding-top: 18px; border-top: 1.5px solid var(--basalto); display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 19px; font-weight: 500; }
+  .total .barra { width: 120px; height: 26px; background: var(--basalto); }
+  .codigo { margin-top: 30px; height: 52px; background: repeating-linear-gradient(90deg, var(--basalto) 0 3px, transparent 3px 7px, var(--basalto) 7px 8px, transparent 8px 13px); opacity: 0.8; }
+  .nota { margin-top: 24px; font-family: var(--serif); font-style: italic; font-size: 30px; line-height: 1.05; color: var(--valle); }
+
+  /* Valle y sol */
+  .valle { position: absolute; left: 0; right: 0; top: 770px; height: 130px; }
+  .valle svg { width: 100%; height: 100%; display: block; }
+  .sol { position: absolute; left: 744px; top: 748px; width: 58px; height: 58px; border-radius: 50%; background: var(--tezontle); }
+
+  .pie { position: absolute; left: 72px; right: 72px; bottom: 72px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .pie .etiqueta { color: var(--tinta-2); text-align: right; line-height: 1.5; font-weight: 400; }
+</style>
+</head>
+<body>
+<div class="lienzo">
+  <div class="cabecera">
+    <span class="marca">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="#2f4a3a"/><g stroke="#f3f0e8" stroke-width="1.4" fill="none"><path d="M6 9h16v12H6z"/><path d="M11.3 9v12M16.7 9v12M6 15h16"/></g><circle cx="22" cy="6" r="3.2" fill="#c2410c"/></svg>
+      <span>Solar Service Mx</span>
+    </span>
+    <span class="etiqueta">Michoacán · Casas y negocios</span>
+  </div>
+
+  <h1>Que más de tu dinero se quede <em>en casa.</em></h1>
+  <p class="bajada">Un sistema solar interconectado a CFE produce en tu techo parte de la electricidad que consumes.</p>
+
+  <div class="recibo" aria-hidden="true">
+    <div class="recibo-papel">
+      <div class="recibo-cab"><span>Recibo de luz</span><span>Bimestral</span></div>
+      <div class="fila"><span>Consumo</span><i></i><span>kWh</span></div>
+      <div class="barra" style="margin-top:10px;width:74%"></div>
+      <div class="fila"><span>Energía</span><i></i><span>$</span></div>
+      <div class="barra" style="margin-top:10px;width:58%"></div>
+      <div class="fila"><span>Cargos</span><i></i><span>$</span></div>
+      <div class="barra" style="margin-top:10px;width:40%"></div>
+      <div class="total"><span>Total</span><span class="barra"></span></div>
+      <div class="codigo"></div>
+      <p class="nota">¿Y si tu techo pusiera una parte?</p>
+    </div>
+  </div>
+
+  <div class="valle" aria-hidden="true">
+    <svg viewBox="0 0 1080 130" preserveAspectRatio="none">
+      <g fill="none" stroke="#16150f" stroke-linecap="round">
+        <path d="M0 112 C90 104 130 66 200 70 C260 74 290 100 360 96 C430 92 470 48 560 44 C640 40 690 30 772 34 C850 38 900 84 980 88 C1030 90 1060 96 1080 98" stroke-opacity="0.6" stroke-width="2"/>
+        <path d="M0 122 C110 118 170 96 250 98 C340 100 390 116 480 114 C570 112 620 86 720 88 C820 90 880 110 980 112 C1030 113 1060 114 1080 116" stroke-opacity="0.32" stroke-width="1.6"/>
+      </g>
+    </svg>
+  </div>
+  <div class="sol" aria-hidden="true"></div>
+
+  <div class="pie">
+    <div class="cta">
+      <span class="cta-boton">Escríbenos por WhatsApp
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+      <span class="cta-numero"><small>WhatsApp</small>+52 33 1706 1726</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

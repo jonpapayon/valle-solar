@@ -13,8 +13,9 @@ Sitio estático en Astro 7 + Tailwind 4. Dirección visual «Oficio en el valle�
 
 ## Dónde se ajusta cada cosa
 
-- **Datos de la empresa** (nombre, WhatsApp, región): `src/data/empresa.ts`. Solo datos confirmados.
-- **Parámetros de la calculadora** (HSP, rendimiento, potencia del panel, días por periodo): `src/config/calculadora.ts`. Pendientes de validación.
+- **Datos de la empresa** (nombre, WhatsApp, servicios, gestión, municipios de cobertura): `src/data/empresa.ts`. Solo datos confirmados.
+- **Parámetros de la calculadora** (panel de referencia 630 W, rango 630–715 W, 5.2 HSP, factor 0.8, días por periodo): `src/config/calculadora.ts`. Confirmados por el responsable.
+- **Datos confirmados y pendientes del negocio**: `docs/datos-del-negocio.md`.
 - **Lógica de cálculo**: `src/lib/calculo.ts` (solo kWh; nunca convierte pesos a kWh).
 - **Mensajes de WhatsApp**: `src/lib/whatsapp.ts`.
 - **Dominio, logotipo y fotografías**: `src/config/sitio.ts`.

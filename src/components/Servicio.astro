@@ -2,14 +2,12 @@
 import { empresa } from "../data/empresa";
 
 const si = [
-  { k: "Instalamos", v: "Sistemas fotovoltaicos interconectados a la red de CFE" },
+  ...empresa.servicios.map((v) => ({ k: "Instalamos", v })),
   { k: "Para", v: "Casas y negocios" },
-  { k: "Dónde", v: empresa.region },
+  { k: "Trámite CFE", v: "Lo gestionamos; incluido en la cotización" },
+  { k: "Visita técnica", v: "Sin costo adicional" },
 ];
-const no = [
-  { k: "No ofrecemos", v: "Sistemas autónomos, aislados de la red" },
-  { k: "No ofrecemos", v: "Sistemas de bombeo solar" },
-];
+const no = empresa.noOfrece.map((v) => ({ k: "No ofrecemos", v }));
 ---
 
 <section id="servicio" aria-labelledby="titulo-servicio" class="seccion">
@@ -20,9 +18,20 @@ const no = [
         Un solo oficio: <span class="text-valle">sistemas conectados a la red de CFE</span>
       </h2>
       <p class="mt-8 max-w-[30rem] text-lg leading-relaxed text-tinta-2">
-        Nos dedicamos a un tipo de instalación, para casas y negocios de {empresa.region}. Tu inmueble sigue conectado a
-        CFE y suma la energía de sus propios paneles.
+        Instalamos sistemas fotovoltaicos interconectados para casas y negocios, también híbridos con baterías. En todos
+        los casos tu inmueble sigue conectado a CFE y suma la energía de sus propios paneles.
       </p>
+
+      <div id="cobertura" class="cobertura mt-12 scroll-mt-24">
+        <p class="etiqueta">Cobertura</p>
+        <ul class="municipios mt-4">
+          {empresa.municipios.map((m) => <li class:list={[{ base: m === "Zamora" || m === "Morelia" }]}>{m}</li>)}
+        </ul>
+        <p class="mt-5 max-w-[30rem] text-base leading-relaxed text-tinta-2">
+          También podemos revisar localidades cercanas; como referencia, {empresa.coberturaAproximada}. Confírmanos tu
+          ubicación por WhatsApp.
+        </p>
+      </div>
     </div>
 
     <div class="lg:col-span-6 lg:pt-3">
@@ -63,6 +72,30 @@ const no = [
 </section>
 
 <style>
+  .cobertura {
+    border-top: 1px solid var(--color-basalto);
+    padding-top: 1.25rem;
+  }
+  .municipios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .municipios li {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-linea-fuerte);
+    border-radius: 999px;
+    background: #f8f6ef;
+  }
+  /* Zamora y Morelia: bases de referencia de la cobertura */
+  .municipios li.base {
+    background: var(--color-valle);
+    border-color: var(--color-valle);
+    color: var(--color-cal);
+  }
   .ficha-tecnica {
     border: 1px solid var(--color-basalto);
     border-radius: 4px;
@@ -82,7 +115,7 @@ const no = [
     color: var(--color-tinta-2);
     font-weight: 400;
   }
-  ul li {
+  .ficha-tecnica li {
     display: grid;
     grid-template-columns: 7.5rem 1fr auto;
     align-items: center;
@@ -140,7 +173,7 @@ const no = [
     stroke: var(--color-tezontle-2);
   }
   @media (max-width: 639px) {
-    ul li {
+    .ficha-tecnica li {
       grid-template-columns: 1fr auto;
       gap: 0.25rem 1rem;
       padding-inline: 1rem;

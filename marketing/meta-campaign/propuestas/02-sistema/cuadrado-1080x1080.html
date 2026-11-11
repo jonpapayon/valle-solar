@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="lienzo" content="1080x1080">
+<title>02 · Tu propio sistema solar · 1080×1080</title>
+<link rel="stylesheet" href="../../fuentes/marca.css">
+<style>
+  :root { --w: 1080px; --h: 1080px; }
+  body { background: var(--valle); color: var(--cal); }
+  .lienzo {
+    background-image:
+      linear-gradient(rgb(243 240 232 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(243 240 232 / 0.045) 1px, transparent 1px);
+    background-size: 36px 36px;
+    background-position: -1px -1px;
+  }
+  .cabecera { position: absolute; left: 72px; right: 72px; top: 64px; display: flex; justify-content: space-between; align-items: center; }
+  .cabecera .etiqueta { color: var(--valle-tinta); font-weight: 400; }
+
+  h1 {
+    position: absolute; left: 72px; top: 160px; width: 940px;
+    font-family: var(--serif); font-weight: 400; font-size: 112px; line-height: 0.92; letter-spacing: -0.022em;
+  }
+  h1 em { color: var(--tezontle-claro); }
+  .lamina-id { position: absolute; right: 72px; top: 186px; text-align: right; color: var(--valle-tinta); font-size: 20px; line-height: 1.5; }
+
+  .diagrama { position: absolute; left: 48px; top: 392px; width: 984px; }
+  .diagrama svg { display: block; width: 100%; height: auto; }
+  .diagrama text { font-family: var(--mono); fill: #f3f0e8; paint-order: stroke; stroke: #2f4a3a; stroke-width: 9px; stroke-linejoin: round; }
+  .rot { font-size: 27px; font-weight: 500; }
+  .sec { font-size: 23px; fill: #dce2d8 !important; }
+  .num { font-size: 25px; fill: #f0a27f !important; }
+  .tipo { font-size: 22px; fill: #dce2d8 !important; }
+  .terreno { stroke: rgb(243 240 232 / 0.55); stroke-width: 2; }
+  .limite { stroke: rgb(243 240 232 / 0.55); stroke-width: 2; stroke-dasharray: 8 8; }
+  .casa { fill: rgb(22 21 15 / 0.2); stroke: #f3f0e8; stroke-width: 2; }
+  .techo { fill: none; stroke: #f3f0e8; stroke-width: 2.6; stroke-linejoin: round; }
+  .caja { fill: #263d30; stroke: #f3f0e8; stroke-width: 2; }
+  .caja-suave { fill: none; stroke: rgb(243 240 232 / 0.55); stroke-width: 1.6; }
+  .fino { fill: none; stroke: rgb(243 240 232 / 0.7); stroke-width: 1.6; }
+  .modulo { fill: #c2410c; stroke: #f3f0e8; stroke-width: 1.6; }
+  .celdas { stroke: rgb(243 240 232 / 0.55); stroke-width: 1.2; }
+  .patas { stroke: #f3f0e8; stroke-width: 1.6; }
+  .medidor circle { fill: #c2410c; stroke: #f3f0e8; stroke-width: 2.4; }
+  .medidor path { fill: none; stroke: #f3f0e8; stroke-width: 2.4; stroke-linecap: round; }
+  .poste path { fill: none; stroke: #f3f0e8; stroke-width: 3; stroke-linecap: round; }
+  .sol circle { fill: #f0a27f; }
+  .sol path { stroke: #f0a27f; stroke-width: 3; stroke-linecap: round; }
+  .conductor { fill: none; stroke: rgb(243 240 232 / 0.4); stroke-width: 2.4; }
+  .flujo { fill: none; stroke: #f0a27f; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 2 16; }
+
+  .leyenda { position: absolute; left: 72px; top: 828px; width: 900px; font-family: var(--mono); font-size: 21px; line-height: 1.55; color: var(--valle-tinta); }
+  .leyenda b { color: var(--tezontle-claro); font-weight: 500; }
+  .pie { position: absolute; left: 72px; right: 72px; bottom: 72px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .pie .nota { font-family: var(--mono); font-size: 21px; line-height: 1.5; color: var(--valle-tinta); text-align: right; }
+</style>
+</head>
+<body>
+<div class="lienzo">
+  <div class="cabecera">
+    <span class="marca">
+      <svg viewBox="0 0 28 28" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="6" fill="#f3f0e8"/><g stroke="#2f4a3a" stroke-width="1.4" fill="none"><path d="M6 9h16v12H6z"/><path d="M11.3 9v12M16.7 9v12M6 15h16"/></g><circle cx="22" cy="6" r="3.2" fill="#c2410c"/></svg>
+      <span>Solar Service Mx</span>
+    </span>
+    <span class="etiqueta">Michoacán</span>
+  </div>
+
+  <h1>Tu techo, <em>conectado</em><br>a la red de CFE.</h1>
+
+  <div class="diagrama" aria-hidden="true">
+    <svg viewBox="60 110 1140 470">
+      <g class="sol"><circle cx="150" cy="190" r="30"/><path d="M150 140v-14M150 254v-14M100 190H86M214 190h-14M115 155l-10-10M195 235l-10-10M115 225l-10 10M195 145l-10 10"/></g>
+      <path d="M20 540H1180" class="terreno"/>
+      <path d="M880 150V570" class="limite"/>
+      <text x="866" y="174" text-anchor="end" class="sec">Inmueble</text>
+      <text x="894" y="174" class="sec">Red pública</text>
+      <path d="M140 320H660V540H140Z" class="casa"/>
+      <path d="M110 320L400 150L690 320" class="techo"/>
+      <g transform="translate(400 150) rotate(30.38)">
+        <g transform="translate(44 -20)"><rect width="58" height="12" rx="1.5" class="modulo"/><path d="M19.3 0V12M38.6 0V12" class="celdas"/><path d="M10 12V20M48 12V20" class="patas"/></g>
+        <g transform="translate(108 -20)"><rect width="58" height="12" rx="1.5" class="modulo"/><path d="M19.3 0V12M38.6 0V12" class="celdas"/><path d="M10 12V20M48 12V20" class="patas"/></g>
+        <g transform="translate(172 -20)"><rect width="58" height="12" rx="1.5" class="modulo"/><path d="M19.3 0V12M38.6 0V12" class="celdas"/><path d="M10 12V20M48 12V20" class="patas"/></g>
+        <g transform="translate(236 -20)"><rect width="58" height="12" rx="1.5" class="modulo"/><path d="M19.3 0V12M38.6 0V12" class="celdas"/><path d="M10 12V20M48 12V20" class="patas"/></g>
+      </g>
+      <text x="630" y="226" class="num">01</text><text x="668" y="226" class="rot">Paneles</text>
+      <g transform="translate(180 360)"><rect width="80" height="90" rx="6" class="caja"/><path d="M18 38h18M18 50h18M46 44c4-8 8-8 12 0s8 8 12 0" class="fino"/></g>
+      <text x="168" y="486" class="num">02</text><text x="206" y="486" class="rot">Inversor</text>
+      <g transform="translate(380 380)"><rect width="70" height="100" rx="6" class="caja"/><path d="M16 24h38M16 44h38M16 64h38M16 84h38" class="fino"/></g>
+      <text x="372" y="370" class="num">03</text><text x="410" y="370" class="rot">Tablero</text>
+      <g transform="translate(520 396)"><rect width="116" height="80" rx="6" class="caja-suave"/><circle cx="30" cy="30" r="9" class="fino"/><path d="M26 42h8M27 46h6" class="fino"/><rect x="52" y="18" width="20" height="30" rx="2" class="fino"/><path d="M52 30h20" class="fino"/><circle cx="94" cy="32" r="12" class="fino"/><path d="M94 20v24M82 32h24" class="fino"/><text x="58" y="70" text-anchor="middle" class="sec">Cargas</text></g>
+      <g transform="translate(880 505)" class="medidor"><circle r="34"/><path d="M-16 -6h32M16 -6l-7 -7M-16 6h32M-16 6l7 7"/></g>
+      <text x="830" y="456" text-anchor="end" class="num">04</text>
+      <text x="830" y="484" text-anchor="end" class="rot">Medidor</text>
+      <text x="830" y="512" text-anchor="end" class="rot">bidireccional</text>
+      <g class="poste"><path d="M1080 200V540M1036 232H1124M1046 262H1114"/><path d="M1036 232l-24 -16M1124 232l24 -16" stroke-width="1.6"/></g>
+      <text x="1080" y="572" text-anchor="middle" class="rot"><tspan class="num" style="font-size:25px">05 </tspan>Red de CFE</text>
+      <g class="conductor"><path d="M600 268V340H220V360"/><path d="M260 405H380"/><path d="M450 435H520"/><path d="M415 480V505H846"/><path d="M914 505H980V232H1060"/></g>
+      <text x="556" y="334" class="tipo">CD</text><text x="300" y="398" class="tipo">CA</text>
+      <g class="flujo"><path d="M600 268V340H220V360"/><path d="M260 405H380"/><path d="M450 435H520"/><path d="M415 480V505H846"/><path d="M914 505H980V232H1060"/></g>
+    </svg>
+  </div>
+
+  <p class="leyenda"><b>●●●</b> Los paneles alimentan primero tu consumo. Si sobra, la energía sale a la red y el medidor bidireccional la registra.</p>
+
+  <div class="pie">
+    <div class="cta">
+      <span class="cta-boton">Pregúntanos por WhatsApp
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+      <span class="cta-numero"><small>WhatsApp</small>+52 33 1706 1726</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

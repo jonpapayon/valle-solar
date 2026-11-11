@@ -2,14 +2,49 @@
 import { empresa } from "../data/empresa";
 import { urlWhatsApp } from "../lib/whatsapp";
 
-/* Solo respuestas confirmadas o técnicamente generales. Baterías, costos y tiempos: pendientes. */
+/* Solo respuestas confirmadas por el responsable o técnicamente generales. Tiempos de instalación: pendientes. */
+const municipios = empresa.municipios.join(", ");
 const preguntas = [
-  { p: "¿Qué tipo de sistemas instalan?", r: `Sistemas fotovoltaicos interconectados a la red de CFE, para casas y negocios en ${empresa.region}.` },
-  { p: "¿Instalan sistemas autónomos o de bombeo solar?", r: "No. No ofrecemos sistemas autónomos aislados de la red ni sistemas de bombeo solar." },
-  { p: "¿Sigo conectado a CFE?", r: "Sí. Un sistema interconectado trabaja junto con la red: tomas energía de ella cuando tus paneles no producen o no alcanzan." },
-  { p: "¿Cómo se refleja en mi recibo?", r: "Depende del esquema de interconexión que aplique a tu contrato con CFE. Te lo explicamos con tu recibo." },
-  { p: "¿Dónde encuentro mi consumo en kWh?", r: "En tu recibo de CFE, en la cifra de consumo del periodo acompañada de la unidad kWh. Si no la encuentras, mándanos una foto del recibo por WhatsApp." },
-  { p: "¿La calculadora me da una cotización?", r: "No. Da una estimación orientativa del tamaño del sistema a partir de tu consumo. El sistema y el precio se definen después de revisar tu inmueble." },
+  {
+    p: "¿Qué tipo de sistemas instalan?",
+    r: "Sistemas fotovoltaicos interconectados a la red de CFE para casas y negocios. También ofrecemos sistemas híbridos con baterías, que siguen interconectados a la red.",
+  },
+  {
+    p: "¿Instalan sistemas autónomos o de bombeo solar?",
+    r: "No. No ofrecemos sistemas autónomos aislados de la red ni sistemas de bombeo solar.",
+  },
+  {
+    p: "¿Quién hace el trámite de interconexión con CFE?",
+    r: "Nosotros. Gestionamos el trámite de interconexión ante CFE y esa gestión está incluida en la cotización.",
+  },
+  {
+    p: "¿La visita técnica tiene costo?",
+    r: "No tiene costo adicional. En la visita revisamos el techo, su orientación y la instalación eléctrica.",
+  },
+  {
+    p: "¿En qué municipios trabajan?",
+    r: `${municipios}. También podemos revisar localidades cercanas (como referencia, ${empresa.coberturaAproximada}); confírmanos tu ubicación por WhatsApp.`,
+  },
+  {
+    p: "¿Mi negocio necesita trámites adicionales?",
+    r: "Depende del proyecto. En algunos proyectos comerciales, industriales o con características eléctricas particulares puede requerirse una verificación por una Unidad de Verificación de Instalaciones Eléctricas (UVIE) y trámites adicionales. No aplica a todos los negocios: lo revisamos en la visita técnica.",
+  },
+  {
+    p: "¿Sigo conectado a CFE?",
+    r: "Sí. Un sistema interconectado trabaja junto con la red: tomas energía de ella cuando tus paneles no producen o no alcanzan.",
+  },
+  {
+    p: "¿Cómo se refleja en mi recibo?",
+    r: "Depende del esquema de interconexión que aplique a tu contrato con CFE. Te lo explicamos con tu recibo.",
+  },
+  {
+    p: "¿Dónde encuentro mi consumo en kWh?",
+    r: "En tu recibo de CFE, en la cifra de consumo del periodo acompañada de la unidad kWh. Si no la encuentras, mándanos una foto del recibo por WhatsApp.",
+  },
+  {
+    p: "¿La calculadora me da una cotización?",
+    r: "No. Da una estimación orientativa del tamaño del sistema a partir de tu consumo, no una garantía de generación. El sistema y el precio se definen después de revisar tu inmueble.",
+  },
 ];
 const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Tengo una pregunta sobre los sistemas interconectados.`);
 ---
