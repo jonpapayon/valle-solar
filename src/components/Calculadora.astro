@@ -1,0 +1,457 @@
+---
+/**
+ * «Lámina 01»: calculadora orientativa presentada como una hoja técnica.
+ * Arriba, un plano ilustrativo de techo (vista superior) que se llena con los módulos estimados;
+ * abajo, el cajetín con los datos y el resultado.
+ *
+ * Sin JavaScript el formulario abre igualmente el chat de WhatsApp (wa.me ignora los campos).
+ * Parámetros técnicos: src/config/calculadora.ts (pendientes de validación).
+ */
+import { empresa } from "../data/empresa";
+import { parametrosCalculo } from "../config/calculadora";
+
+// Geometría del plano (viewBox 720 × 322). Techo a dos aguas visto desde arriba; cumbrera horizontal.
+const TECHO = { x: 60, y: 38, w: 600, h: 252 };
+const CUMBRERA = TECHO.y + TECHO.h / 2; // 164
+const MOD = { w: 30, h: 48, g: 4 };
+const COLS = 16;
+const x0 = TECHO.x + (TECHO.w - (COLS * (MOD.w + MOD.g) - MOD.g)) / 2;
+// Orden de llenado: faldón sur (abajo) desde el alero, luego faldón norte desde la cumbrera.
+const filas = [
+  CUMBRERA + 10 + MOD.h + MOD.g, // sur, junto al alero
+  CUMBRERA + 10, // sur, junto a la cumbrera
+  CUMBRERA - 10 - MOD.h, // norte, junto a la cumbrera
+  CUMBRERA - 10 - 2 * MOD.h - MOD.g, // norte, junto al alero
+];
+const ranuras = filas.flatMap((y) => Array.from({ length: COLS }, (_, c) => ({ x: x0 + c * (MOD.w + MOD.g), y })));
+---
+
+<form
+  id="calculadora"
+  action={`https://wa.me/${empresa.whatsapp.numero}`}
+  method="get"
+  target="_blank"
+  novalidate
+  aria-labelledby="titulo-calculadora"
+  class="lamina scroll-mt-24"
+>
+  <!-- Cabecera de la lámina -->
+  <div class="flex items-center justify-between gap-4 border-b border-linea-fuerte px-4 py-2.5 sm:px-5">
+    <p id="titulo-calculadora" class="font-mono text-[0.8125rem] font-medium tracking-[0.01em]">
+      Lámina 01 · Calculadora de sistema
+    </p>
+    <span class="hidden font-mono text-[0.8125rem] text-tinta-2 xl:inline">Estimación orientativa</span>
+  </div>
+
+  <!-- Plano ilustrativo del techo -->
+  <div class="plano relative border-b border-linea-fuerte">
+    <svg viewBox="0 0 720 322" class="block h-auto w-full" role="img" aria-labelledby="plano-titulo">
+      <title id="plano-titulo">Plano ilustrativo de un techo que se llena con el número estimado de módulos</title>
+      <g class="trazo-plano">
+        <rect x={TECHO.x - 12} y={TECHO.y - 12} width={TECHO.w + 24} height={TECHO.h + 24} class="alero"></rect>
+        <rect x={TECHO.x} y={TECHO.y} width={TECHO.w} height={TECHO.h} class="contorno" pathLength="1"></rect>
+        <path d={`M${TECHO.x} ${CUMBRERA}H${TECHO.x + TECHO.w}`} class="cumbrera" pathLength="1"></path>
+      </g>
+
+      <g id="modulos">
+        {
+          ranuras.map((r, i) => (
+            <g class="modulo" transform={`translate(${r.x} ${r.y})`} style={`--d:${i * 18}ms`}>
+              <rect width={MOD.w} height={MOD.h} rx="1.5" />
+              <path d={`M${MOD.w / 2} 0V${MOD.h}M0 ${MOD.h / 3}H${MOD.w}M0 ${(2 * MOD.h) / 3}H${MOD.w}`} />
+            </g>
+          ))
+        }
+      </g>
+
+      <!-- Brújula: el faldón inferior mira al sur -->
+      <g transform="translate(690 56)" class="brujula">
+        <circle r="15"></circle>
+        <path d="M0 -11L5 6L0 2L-5 6Z"></path>
+        <text y="-21" text-anchor="middle">N</text>
+      </g>
+
+      <!-- Cota -->
+      <g class="cota">
+        <path d={`M${TECHO.x} 310H${TECHO.x + TECHO.w}M${TECHO.x} 304V316M${TECHO.x + TECHO.w} 304V316`}></path>
+        <text x={TECHO.x + TECHO.w / 2} y="314" text-anchor="middle" class="cota-texto">Techo ilustrativo · sin escala</text>
+      </g>
+
+      <text id="plano-vacio" x="360" y={CUMBRERA + 6} text-anchor="middle" class="plano-mensaje">Escribe tu consumo en kWh</text>
+      <g id="plano-exceso" class="exceso" visibility="hidden">
+        <rect x="60" y="6" width="220" height="24" rx="12"></rect>
+        <text x="170" y="23" text-anchor="middle"></text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Cajetín: datos -->
+  <div class="cajetin grid sm:grid-cols-2 xl:grid-cols-6">
+    <fieldset class="celda xl:col-span-3">
+      <legend class="celda-rotulo">Periodo del recibo</legend>
+      <div class="segmentado mt-2">
+        <label><input type="radio" name="periodo" value="bimestral" checked />Bimestral</label>
+        <label><input type="radio" name="periodo" value="mensual" />Mensual</label>
+      </div>
+    </fieldset>
+    <fieldset class="celda xl:col-span-3">
+      <legend class="celda-rotulo">Es para</legend>
+      <div class="segmentado mt-2">
+        <label><input type="radio" name="tipo" value="casa" checked />Casa</label>
+        <label><input type="radio" name="tipo" value="negocio" />Negocio</label>
+      </div>
+    </fieldset>
+    <div class="celda sm:col-span-2 xl:col-span-2">
+      <label for="calc-kwh" class="celda-rotulo">Consumo del periodo</label>
+      <div class="relative mt-2">
+        <input
+          id="calc-kwh"
+          name="kwh"
+          type="text"
+          inputmode="decimal"
+          autocomplete="off"
+          class="campo campo-grande pr-14"
+          aria-describedby="calc-kwh-ayuda calc-kwh-error"
+        />
+        <span aria-hidden="true" class="pointer-events-none absolute inset-y-0 right-3.5 flex items-center font-mono text-sm text-tinta-2">kWh</span>
+      </div>
+      <p id="calc-kwh-error" class="campo-error"></p>
+      <p id="calc-kwh-ayuda" class="campo-ayuda">Viene en tu recibo de CFE.</p>
+    </div>
+
+    <div class="celda xl:col-span-2">
+      <label for="calc-importe" class="celda-rotulo">Importe <span class="font-normal text-tinta-2">· opcional</span></label>
+      <div class="relative mt-2">
+        <span aria-hidden="true" class="pointer-events-none absolute inset-y-0 left-3.5 flex items-center font-mono text-sm text-tinta-2">$</span>
+        <input id="calc-importe" name="importe" type="text" inputmode="decimal" autocomplete="off" class="campo pl-8 font-mono" aria-describedby="calc-importe-ayuda" />
+      </div>
+      <p id="calc-importe-ayuda" class="campo-ayuda">No se usa para calcular.</p>
+    </div>
+    <div class="celda xl:col-span-2">
+      <label for="calc-municipio" class="celda-rotulo">Municipio <span class="font-normal text-tinta-2">· opcional</span></label>
+      <input id="calc-municipio" name="municipio" type="text" autocomplete="address-level2" class="campo mt-2" />
+    </div>
+  </div>
+
+  <!-- Cajetín: resultado -->
+  <dl class="resultado grid grid-cols-3" aria-live="polite" aria-atomic="true">
+    <div class="celda-res">
+      <dt class="celda-rotulo">Consumo diario</dt>
+      <dd class="cifra"><span data-r="kwhDia">—</span><span class="unidad">kWh</span></dd>
+    </div>
+    <div class="celda-res">
+      <dt class="celda-rotulo">Potencia aprox.</dt>
+      <dd class="cifra"><span data-r="kwp">—</span><span class="unidad">kWp</span></dd>
+    </div>
+    <div class="celda-res">
+      <dt class="celda-rotulo">Paneles aprox.</dt>
+      <dd class="cifra"><span data-r="paneles">—</span><span class="unidad">× {parametrosCalculo.potenciaPanelW} W</span></dd>
+    </div>
+  </dl>
+
+  <div class="grid gap-3 p-4 sm:p-5">
+    <button type="submit" class="btn btn-primario w-full" data-boton>
+      <span data-boton-texto>Enviar por WhatsApp</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </button>
+    <details class="group border-t border-linea pt-1">
+        <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-[0.9375rem] font-medium [&::-webkit-details-marker]:hidden">
+          ¿No encuentras tus kWh?
+          <span class="font-mono text-tinta-2 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <div class="space-y-2 pt-1 text-sm leading-relaxed text-tinta-2">
+          <p>Busca la cifra de consumo del periodo acompañada de «kWh». El recibo también trae el historial de periodos anteriores.</p>
+          <p>Si no la encuentras, deja vacío el consumo y pulsa el botón: se abre WhatsApp para que nos mandes una foto del recibo.</p>
+        </div>
+      </details>
+    <p class="text-[0.8125rem] leading-snug text-tinta-2">
+      Estimación orientativa calculada solo con tu consumo. No es un dimensionamiento ni una cotización: el sistema y
+      el precio se definen al revisar tu inmueble.
+    </p>
+  </div>
+</form>
+
+<script>
+  import { empresa } from "../data/empresa";
+  import { parametrosCalculo } from "../config/calculadora";
+  import { estimarSistema, formatoNumero, leerNumero, type Periodo } from "../lib/calculo";
+  import { mensajeEstimacion, mensajeSinConsumo, urlWhatsApp, type DatosCalculadora, type TipoCliente } from "../lib/whatsapp";
+  import { abrirWhatsApp, guardarCalculo } from "../lib/navegador";
+
+  const form = document.getElementById("calculadora") as HTMLFormElement | null;
+
+  if (form) {
+    const $ = <T extends Element>(s: string) => form.querySelector<T>(s)!;
+    const kwhInput = $<HTMLInputElement>("#calc-kwh");
+    const kwhError = $<HTMLElement>("#calc-kwh-error");
+    const botonTexto = $<HTMLElement>("[data-boton-texto]");
+    const modulos = [...form.querySelectorAll<SVGGElement>(".modulo")];
+    const vacio = $<SVGTextElement>("#plano-vacio");
+    const exceso = $<SVGGElement>("#plano-exceso");
+    const r = (k: string) => $<HTMLElement>(`[data-r="${k}"]`);
+
+    const leer = (): DatosCalculadora => {
+      const f = new FormData(form);
+      const municipio = String(f.get("municipio") ?? "").trim();
+      return {
+        periodo: (f.get("periodo") as Periodo) ?? "bimestral",
+        kwh: leerNumero(String(f.get("kwh") ?? "")),
+        importe: leerNumero(String(f.get("importe") ?? "")),
+        tipo: (f.get("tipo") as TipoCliente) ?? null,
+        municipio: municipio || null,
+      };
+    };
+
+    const errorKwh = (): string => {
+      const texto = kwhInput.value.trim();
+      if (!texto) return "";
+      const n = leerNumero(texto);
+      if (n === null) return "Escribe solo números, por ejemplo 1150.";
+      if (n <= 0) return "El consumo debe ser mayor que cero.";
+      if (n > parametrosCalculo.consumoMaxKwh) return "Revisa la cifra: parece demasiado alta para un periodo.";
+      return "";
+    };
+
+    const pintarPlano = (n: number) => {
+      const visibles = Math.min(n, modulos.length);
+      modulos.forEach((m, i) => m.classList.toggle("on", i < visibles));
+      vacio.style.visibility = n > 0 ? "hidden" : "visible";
+      if (n > modulos.length) {
+        exceso.setAttribute("visibility", "visible");
+        exceso.querySelector("text")!.textContent = `+${formatoNumero(n - modulos.length)} módulos más`;
+      } else {
+        exceso.setAttribute("visibility", "hidden");
+      }
+    };
+
+    const actualizar = (mostrarError = false) => {
+      const d = leer();
+      const e = estimarSistema(d.kwh, d.periodo, parametrosCalculo);
+      const err = errorKwh();
+      if (mostrarError || !err) {
+        kwhError.textContent = err;
+        kwhInput.setAttribute("aria-invalid", err ? "true" : "false");
+      }
+      if (e) {
+        r("kwhDia").textContent = formatoNumero(e.kwhDia, 1);
+        r("kwp").textContent = formatoNumero(e.kwp, 1);
+        r("paneles").textContent = formatoNumero(e.paneles);
+        pintarPlano(e.paneles);
+        botonTexto.textContent = "Enviar estimación por WhatsApp";
+        guardarCalculo({ datos: d, estimacion: e });
+      } else {
+        r("kwhDia").textContent = r("kwp").textContent = r("paneles").textContent = "—";
+        pintarPlano(0);
+        botonTexto.textContent = err ? "Enviar por WhatsApp" : "Enviar mi recibo por WhatsApp";
+        guardarCalculo(null);
+      }
+      return { d, e, err };
+    };
+
+    form.addEventListener("input", () => actualizar(false));
+    kwhInput.addEventListener("blur", () => actualizar(true));
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const { d, e, err } = actualizar(true);
+      if (err) {
+        kwhInput.focus();
+        return;
+      }
+      const texto = e ? mensajeEstimacion(empresa.nombre, d, e) : mensajeSinConsumo(empresa.nombre, d);
+      abrirWhatsApp(urlWhatsApp(empresa.whatsapp.numero, texto));
+    });
+
+    // Enlaces que preseleccionan el tipo de cliente («Calcular para mi casa»).
+    document.querySelectorAll<HTMLAnchorElement>("a[data-tipo-calculadora]").forEach((a) =>
+      a.addEventListener("click", () => {
+        const radio = form.querySelector<HTMLInputElement>(`input[name="tipo"][value="${a.dataset.tipoCalculadora}"]`);
+        if (radio) radio.checked = true;
+        setTimeout(() => kwhInput.focus({ preventScroll: true }), 450);
+        actualizar(false);
+      }),
+    );
+
+    actualizar(false);
+  }
+</script>
+
+<style>
+  .lamina {
+    position: relative;
+    border: 1px solid var(--color-basalto);
+    border-radius: 4px;
+    background-color: #f8f6ef;
+    box-shadow: 10px 10px 0 -1px var(--color-cal-2), 10px 10px 0 0 rgb(22 21 15 / 0.22);
+  }
+  .plano {
+    background-color: #f8f6ef;
+    background-image:
+      linear-gradient(rgb(47 74 58 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(47 74 58 / 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -1px -1px;
+  }
+  .trazo-plano * {
+    fill: none;
+    stroke: var(--color-basalto);
+  }
+  .alero {
+    stroke-opacity: 0.35;
+    stroke-dasharray: 5 5;
+  }
+  .contorno,
+  .cumbrera {
+    stroke-width: 1.5;
+    stroke-dasharray: 1;
+    animation: dibujar 1.4s var(--ease-oficio) 0.25s both;
+  }
+  @keyframes dibujar {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  .modulo rect {
+    fill: transparent;
+    stroke: rgb(22 21 15 / 0.22);
+    stroke-dasharray: 2 3;
+    transition: fill 300ms var(--ease-oficio), stroke 300ms;
+    transition-delay: var(--d);
+  }
+  .modulo path {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 0.8;
+    transition: stroke 300ms;
+    transition-delay: var(--d);
+  }
+  .modulo:global(.on) rect {
+    fill: var(--color-valle);
+    stroke: var(--color-valle);
+    stroke-dasharray: none;
+  }
+  .modulo:global(.on) path {
+    stroke: rgb(243 240 232 / 0.45);
+  }
+  .brujula circle {
+    fill: none;
+    stroke: var(--color-basalto);
+    stroke-opacity: 0.5;
+  }
+  .brujula path {
+    fill: var(--color-tezontle);
+  }
+  .brujula text,
+  .cota-texto,
+  .plano-mensaje,
+  .exceso text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    fill: var(--color-basalto);
+  }
+  .cota path {
+    fill: none;
+    stroke: var(--color-basalto);
+    stroke-opacity: 0.45;
+  }
+  .cota-texto {
+    font-size: 12px;
+    paint-order: stroke;
+    stroke: #f8f6ef;
+    stroke-width: 8px;
+    fill: var(--color-tinta-2);
+  }
+  .plano-mensaje {
+    font-size: 17px;
+    paint-order: stroke;
+    stroke: #f8f6ef;
+    stroke-width: 12px;
+  }
+  .exceso rect {
+    fill: var(--color-tezontle);
+  }
+  .exceso text {
+    fill: var(--color-cal);
+    font-weight: 500;
+  }
+
+  .cajetin {
+    gap: 1px;
+    background: var(--color-linea);
+    border-bottom: 1px solid var(--color-linea-fuerte);
+  }
+  .celda {
+    min-width: 0;
+    padding: 0.75rem 1rem 0.875rem;
+    background: #f8f6ef;
+  }
+  @media (min-width: 640px) {
+    .celda { padding-inline: 1.25rem; }
+  }
+  /* La leyenda de un fieldset se dibuja sobre su borde y deja ver el fondo de la rejilla; se aplana. */
+  fieldset.celda > legend {
+    float: left;
+    width: 100%;
+    padding: 0;
+  }
+  fieldset.celda > legend + * {
+    clear: both;
+  }
+  .celda-rotulo {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-basalto);
+  }
+  .campo-grande {
+    font-family: var(--font-mono);
+    font-size: 1.375rem;
+    font-weight: 500;
+    min-height: 3.25rem;
+  }
+  .resultado {
+    background: var(--color-valle);
+    color: var(--color-cal);
+  }
+  .celda-res {
+    min-width: 0;
+    padding: 0.875rem 0.75rem 1rem;
+  }
+  @media (min-width: 640px) {
+    .celda-res { padding-inline: 1.25rem; }
+  }
+  .celda-res + .celda-res {
+    border-left: 1px solid var(--color-linea-clara);
+  }
+  .resultado .celda-rotulo {
+    color: var(--color-valle-tinta);
+    font-weight: 400;
+  }
+  .cifra {
+    margin-top: 0.375rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.125rem 0.375rem;
+    font-family: var(--font-mono);
+    font-size: clamp(1.25rem, 0.9rem + 1.4vw, 2rem);
+    font-weight: 500;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+  .unidad {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--color-valle-tinta);
+  }
+  /* En pantallas estrechas el plano se reduce: los rótulos crecen para seguir siendo legibles. */
+  @media (max-width: 639px) {
+    .plano-mensaje { font-size: 30px; stroke-width: 16px; }
+    .cota-texto { font-size: 22px; }
+    .brujula text { font-size: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .contorno,
+    .cumbrera { stroke-dasharray: none; }
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+/**
+ * Diagrama en alzado de un sistema fotovoltaico interconectado, con tres estados (de día, si sobra, de noche).
+ * Topología: paneles → inversor (CD) → tablero del inmueble (CA) → cargas; el tablero se une a la red de CFE
+ * a través del medidor bidireccional, colocado en el límite del inmueble (punto de interconexión).
+ * Los estados se cambian solo con CSS (:has), sin JavaScript. Ilustración genérica: sin marcas ni modelos.
+ */
+const partes = [
+  { n: "01", t: "Paneles", d: "Convierten la luz del sol en corriente directa." },
+  { n: "02", t: "Inversor", d: "Convierte la corriente directa en corriente alterna, compatible con tu instalación y con la red." },
+  { n: "03", t: "Tablero", d: "Reparte la energía en tu inmueble. Tus equipos usan primero la de los paneles." },
+  { n: "04", t: "Medidor bidireccional", d: "En el punto de interconexión: registra la energía que tomas de la red y la que entregas." },
+  { n: "05", t: "Red de CFE", d: "Te suministra cuando los paneles no producen o no alcanzan." },
+];
+const estados = [
+  { id: "dia", t: "De día", h: "Primero, tu propio consumo", d: "La energía de los paneles se usa en tu inmueble en el momento en que se produce, y tomas menos energía de la red." },
+  { id: "sobra", t: "Si sobra", h: "El excedente sale a la red", d: "Cuando produces más de lo que usas en ese momento, la energía sobrante sale hacia la red de CFE y el medidor bidireccional la registra." },
+  { id: "noche", t: "De noche", h: "La red te suministra", d: "Cuando los paneles no producen o no alcanzan, tomas energía de la red como siempre." },
+];
+const RUTAS = {
+  cd: "M600 268V340H220V360",
+  ca: "M260 405H380",
+  cargas: "M450 435H520",
+  red: "M415 480V505H848",
+  acometida: "M912 505H980V232H1060",
+};
+---
+
+<section id="como-funciona" aria-labelledby="titulo-diagrama" class="seccion sobre-oscuro escena bg-valle text-cal">
+  <div class="wrap">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-8">
+      <div class="lg:col-span-7">
+        <p class="etiqueta">Cómo funciona</p>
+        <h2 id="titulo-diagrama" class="mt-5 font-serif text-[clamp(2.5rem,1.4rem+3.6vw,4.5rem)] leading-[0.98] tracking-[-0.018em]">
+          Cómo se conecta un sistema interconectado
+        </h2>
+      </div>
+      <p class="max-w-[32rem] text-lg leading-relaxed text-valle-tinta lg:col-span-4 lg:col-start-9">
+        El tablero de tu inmueble recibe la energía de los paneles y la de la red. El medidor bidireccional está en el
+        punto donde tu instalación se une con CFE.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-8 lg:grid-cols-12 lg:gap-8">
+      <!-- Controles y explicación del estado -->
+      <div class="flex flex-col gap-8 lg:col-span-4 lg:col-start-9 lg:row-start-1">
+        <fieldset>
+          <legend class="etiqueta mb-3">Momento del día</legend>
+          <div class="segmentado segmentado-oscuro">
+            {
+              estados.map((e, i) => (
+                <label>
+                  <input type="radio" name="estado-diagrama" id={`e-${e.id}`} value={e.id} checked={i === 0} />
+                  {e.t}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <div class="leyendas" aria-live="polite">
+          {
+            estados.map((e) => (
+              <div class="leyenda-estado" data-e={e.id}>
+                <p class="etiqueta">{e.t}</p>
+                <h3 class="mt-3 font-serif text-[2rem] leading-tight">{e.h}</h3>
+                <p class="mt-3 text-base leading-relaxed text-valle-tinta">{e.d}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Escena -->
+      <div class="min-w-0 lg:col-span-8 lg:row-start-1">
+        <div class="marco">
+          <div class="diagrama-scroll" tabindex="0" role="region" aria-label="Diagrama del sistema; en pantallas pequeñas se desplaza horizontalmente">
+            <svg class="diagrama" viewBox="0 0 1200 620" role="img" aria-labelledby="diag-titulo diag-desc">
+              <title id="diag-titulo">Alzado de un sistema fotovoltaico interconectado</title>
+              <desc id="diag-desc">
+                Los paneles del techo se conectan al inversor con corriente directa. El inversor se conecta al tablero del
+                inmueble con corriente alterna. El tablero alimenta las cargas y se une a la red de CFE a través del medidor
+                bidireccional, colocado en el límite del inmueble, por donde la energía puede entrar o salir.
+              </desc>
+
+              <!-- Cielo: sol y luna -->
+              <g class="sol">
+                <circle cx="150" cy="96" r="28"></circle>
+                <path d="M150 48v-14M150 158v-14M102 96H88M212 96h-14M116 62l-10-10M194 140l-10-10M116 130l-10 10M194 52l-10 10"></path>
+              </g>
+              <g class="luna">
+                <path d="M164 70a30 30 0 1 0 0 52a24 24 0 1 1 0-52z"></path>
+              </g>
+
+              <!-- Terreno y límite del inmueble -->
+              <path d="M20 540H1180" class="terreno"></path>
+              <path d="M880 130V570" class="limite"></path>
+              <text x="866" y="150" text-anchor="end" class="rotulo-sec">Inmueble</text>
+              <text x="894" y="150" class="rotulo-sec">Red pública</text>
+
+              <!-- Casa en corte -->
+              <path d="M140 320H660V540H140Z" class="casa"></path>
+              <path d="M110 320L400 150L690 320" class="techo"></path>
+
+              <!-- 01 Paneles sobre el faldón -->
+              <g transform="translate(400 150) rotate(30.38)" class="paneles">
+                {
+                  [44, 108, 172, 236].map((x) => (
+                    <g transform={`translate(${x} -20)`}>
+                      <rect width="58" height="12" rx="1.5" />
+                      <path d="M19.3 0V12M38.6 0V12" class="celdas" />
+                      <path d="M10 12V20M48 12V20" class="patas" />
+                    </g>
+                  ))
+                }
+              </g>
+              <text x="636" y="222" class="num">01</text>
+              <text x="668" y="222" class="rotulo">Paneles</text>
+
+              <!-- 02 Inversor -->
+              <g transform="translate(180 360)">
+                <rect width="80" height="90" rx="6" class="caja"></rect>
+                <path d="M18 38h18M18 50h18M46 44c4-8 8-8 12 0s8 8 12 0" class="fino"></path>
+              </g>
+              <text x="180" y="478" class="num">02</text>
+              <text x="212" y="478" class="rotulo">Inversor</text>
+
+              <!-- 03 Tablero -->
+              <g transform="translate(380 380)">
+                <rect width="70" height="100" rx="6" class="caja"></rect>
+                <path d="M16 24h38M16 44h38M16 64h38M16 84h38" class="fino"></path>
+              </g>
+              <text x="380" y="372" class="num">03</text>
+              <text x="412" y="372" class="rotulo">Tablero</text>
+
+              <!-- Cargas del inmueble -->
+              <g transform="translate(520 396)">
+                <rect width="116" height="80" rx="6" class="caja-suave"></rect>
+                <circle cx="30" cy="30" r="9" class="fino"></circle>
+                <path d="M26 42h8M27 46h6" class="fino"></path>
+                <rect x="52" y="18" width="20" height="30" rx="2" class="fino"></rect>
+                <path d="M52 30h20" class="fino"></path>
+                <circle cx="94" cy="32" r="12" class="fino"></circle>
+                <path d="M94 20v24M82 32h24" class="fino"></path>
+                <text x="58" y="68" text-anchor="middle" class="rotulo-sec">Cargas</text>
+              </g>
+
+              <!-- 04 Medidor bidireccional, sobre el límite -->
+              <g transform="translate(880 505)" class="medidor">
+                <circle r="32"></circle>
+                <path d="M-15 -6h30M15 -6l-7 -6M-15 6h30M-15 6l7 6"></path>
+              </g>
+              <text x="836" y="462" text-anchor="end" class="num">04</text>
+              <text x="836" y="484" text-anchor="end" class="rotulo">Medidor</text>
+              <text x="836" y="506" text-anchor="end" class="rotulo">bidireccional</text>
+              <text x="898" y="578" class="rotulo-sec">Punto de interconexión</text>
+
+              <!-- 05 Red de CFE -->
+              <g class="poste">
+                <path d="M1080 200V540M1036 232H1124M1046 262H1114"></path>
+                <path d="M1036 232l-24 -16M1124 232l24 -16"></path>
+              </g>
+              <text x="1050" y="610" text-anchor="end" class="num">05</text>
+              <text x="1058" y="610" class="rotulo">Red de CFE</text>
+
+              <!-- Conductores base -->
+              <g class="conductor">
+                {Object.values(RUTAS).map((d) => <path d={d} />)}
+              </g>
+              <text x="560" y="332" class="tipo">CD</text>
+              <text x="304" y="396" class="tipo">CA</text>
+
+              <!-- Flujos de energía (el sentido depende del estado) -->
+              <g class="flujos">
+                {Object.entries(RUTAS).map(([k, d]) => <path d={d} class={`flujo f-${k}`} />)}
+              </g>
+            </svg>
+          </div>
+        </div>
+        <p class="mt-3 font-mono text-[0.8125rem] text-valle-tinta md:hidden" aria-hidden="true">Desliza el diagrama →</p>
+      </div>
+    </div>
+
+    <ol class="mt-12 grid gap-x-8 border-t border-linea-clara sm:grid-cols-2 lg:grid-cols-5">
+      {
+        partes.map((p) => (
+          <li class="border-b border-linea-clara py-5 lg:border-b-0">
+            <span class="font-mono text-sm text-[#f0a27f]">{p.n}</span>
+            <h3 class="mt-2 font-medium">{p.t}</h3>
+            <p class="mt-1 text-[0.9375rem] leading-relaxed text-valle-tinta">{p.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .segmentado-oscuro {
+    background: rgb(22 21 15 / 0.28);
+  }
+  .segmentado-oscuro label {
+    color: var(--color-cal);
+  }
+  .segmentado-oscuro label:has(input:checked) {
+    background: var(--color-cal);
+    color: var(--color-basalto);
+  }
+  /* El anillo va por dentro de la opción: oscuro sobre la opción activa (clara), claro sobre las demás. */
+  .segmentado-oscuro input:focus-visible {
+    outline: 2px solid #f0a27f;
+    outline-offset: -5px;
+  }
+  .segmentado-oscuro input:checked:focus-visible {
+    outline-color: var(--color-basalto);
+  }
+
+  .marco {
+    border: 1px solid var(--color-linea-clara);
+    border-radius: 6px;
+    background: #2a4334;
+    transition: background-color 600ms var(--ease-oficio);
+  }
+  .diagrama-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    border-radius: 6px;
+  }
+  .diagrama-scroll:focus-visible {
+    outline: 2px solid var(--color-cal);
+    outline-offset: 3px;
+  }
+  .diagrama {
+    display: block;
+    width: 100%;
+    min-width: 780px;
+    height: auto;
+  }
+  @media (min-width: 768px) {
+    .diagrama { min-width: 0; }
+  }
+
+  .diagrama text {
+    font-family: var(--font-mono);
+    fill: #f3f0e8;
+    paint-order: stroke;
+    stroke: #2a4334;
+    stroke-width: 8px;
+    stroke-linejoin: round;
+    transition: stroke 600ms;
+  }
+  .rotulo { font-size: 21px; font-weight: 500; }
+  .diagrama .rotulo-sec { font-size: 18px; fill: #dce2d8; }
+  .diagrama .num { font-size: 19px; fill: #f0a27f; }
+  .diagrama .tipo { font-size: 17px; fill: #dce2d8; }
+
+  .terreno { stroke: rgb(243 240 232 / 0.55); stroke-width: 1.5; }
+  .limite { stroke: rgb(243 240 232 / 0.55); stroke-width: 1.5; stroke-dasharray: 7 7; }
+  .casa { fill: rgb(22 21 15 / 0.18); stroke: #f3f0e8; stroke-width: 1.5; }
+  .techo { fill: none; stroke: #f3f0e8; stroke-width: 2; stroke-linejoin: round; }
+  .caja { fill: #263d30; stroke: #f3f0e8; stroke-width: 1.5; }
+  .caja-suave { fill: none; stroke: rgb(243 240 232 / 0.55); stroke-width: 1.2; }
+  .fino { fill: none; stroke: rgb(243 240 232 / 0.65); stroke-width: 1.3; }
+  .paneles rect { fill: #c2410c; stroke: #f3f0e8; stroke-width: 1.2; transition: fill 600ms; }
+  .paneles .celdas { stroke: rgb(243 240 232 / 0.55); stroke-width: 1; }
+  .paneles .patas { stroke: #f3f0e8; stroke-width: 1.2; }
+  .medidor circle { fill: #c2410c; stroke: #f3f0e8; stroke-width: 2; }
+  .medidor path { fill: none; stroke: #f3f0e8; stroke-width: 2; stroke-linecap: round; }
+  .poste path { fill: none; stroke: #f3f0e8; stroke-width: 2.5; stroke-linecap: round; }
+  .poste path + path { stroke-width: 1.3; stroke-opacity: 0.7; }
+  .sol circle { fill: #f0a27f; }
+  .sol path { stroke: #f0a27f; stroke-width: 2.5; stroke-linecap: round; }
+  .luna path { fill: #dce2d8; }
+  .sol,
+  .luna { transition: opacity 600ms var(--ease-oficio); }
+  .luna { opacity: 0; }
+
+  .conductor path { fill: none; stroke: rgb(243 240 232 / 0.4); stroke-width: 2; }
+  .flujo {
+    fill: none;
+    stroke: #f0a27f;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-dasharray: 2 14;
+    opacity: 0;
+    transition: opacity 400ms;
+    animation: fluir 0.9s linear infinite;
+  }
+  @keyframes fluir {
+    from { stroke-dashoffset: 16; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Estado: de día (por defecto) */
+  .f-cd,
+  .f-ca,
+  .f-cargas { opacity: 1; }
+
+  /* Estado: si sobra */
+  .escena:has(#e-sobra:checked) .f-red,
+  .escena:has(#e-sobra:checked) .f-acometida { opacity: 1; }
+
+  /* Estado: de noche */
+  .escena:has(#e-noche:checked) .f-cd,
+  .escena:has(#e-noche:checked) .f-ca { opacity: 0; }
+  .escena:has(#e-noche:checked) .f-red,
+  .escena:has(#e-noche:checked) .f-acometida { opacity: 1; animation-direction: reverse; }
+  .escena:has(#e-noche:checked) .sol { opacity: 0; }
+  .escena:has(#e-noche:checked) .luna { opacity: 1; }
+  .escena:has(#e-noche:checked) .paneles rect { fill: #3a5144; }
+  .escena:has(#e-noche:checked) .marco { background: #1f3127; }
+  .escena:has(#e-noche:checked) .diagrama text { stroke: #1f3127; }
+
+  /* Leyendas por estado */
+  .leyenda-estado { display: none; }
+  .escena:has(#e-dia:checked) .leyenda-estado[data-e="dia"],
+  .escena:has(#e-sobra:checked) .leyenda-estado[data-e="sobra"],
+  .escena:has(#e-noche:checked) .leyenda-estado[data-e="noche"] { display: block; }
+  @supports not selector(:has(*)) {
+    .leyenda-estado { display: block; margin-bottom: 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flujo { animation: none; stroke-dasharray: 6 6; }
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * Marca del sitio. Si src/config/sitio.ts define `logo` (y `logoClaro` para fondos oscuros),
+ * se muestra el logotipo oficial; si no, la marca tipográfica provisional.
+ * El símbolo provisional es un módulo fotovoltaico esquemático, no un logotipo.
+ */
+import { empresa } from "../data/empresa";
+import { sitio } from "../config/sitio";
+
+interface Props {
+  claro?: boolean;
+}
+const { claro = false } = Astro.props;
+const logo = claro ? (sitio.logoClaro ?? sitio.logo) : sitio.logo;
+---
+
+{
+  logo ? (
+    <img src={logo.src} alt={logo.alt} width={logo.ancho} height={logo.alto} class="h-8 w-auto" />
+  ) : (
+    <span class:list={["inline-flex items-center gap-2.5", claro ? "text-cal" : "text-basalto"]}>
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" class="shrink-0">
+        <rect x="1" y="1" width="26" height="26" rx="6" fill={claro ? "#f3f0e8" : "#2f4a3a"} />
+        <g stroke={claro ? "#2f4a3a" : "#f3f0e8"} stroke-width="1.4" fill="none">
+          <path d="M6 9h16v12H6z" />
+          <path d="M11.3 9v12M16.7 9v12M6 15h16" />
+        </g>
+        <circle cx="22" cy="6" r="3.2" fill="#c2410c" />
+      </svg>
+      <span class="font-serif text-[1.4375rem] leading-none tracking-[-0.01em] whitespace-nowrap">{empresa.nombre}</span>
+    </span>
+  )
+}

@@ -1,5 +1,5 @@
 {
-  "name": "valle-solar",
+  "name": "solar-service-mx",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -9,11 +9,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test src/lib/*.test.ts",
     "astro": "astro"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.4",
-    "animejs": "^4.5.0",
     "astro": "^7.4.5",
     "tailwindcss": "^4.3.4"
   }

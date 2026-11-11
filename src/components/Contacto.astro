@@ -1,95 +1,170 @@
 ---
 import { empresa } from "../data/empresa";
+import { urlWhatsApp } from "../lib/whatsapp";
+
+const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Quiero cotizar un sistema fotovoltaico interconectado.`);
 ---
 
-<section id="contacto" class="border-t border-edge bg-card">
-  <div class="mx-auto grid max-w-[1240px] items-center gap-12 px-6 py-24 md:px-12 lg:grid-cols-2 lg:gap-20">
-    <div>
-      <h2 class="max-w-[14ch] text-[clamp(2rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-tight">
-        Pide tu cotización
+<section id="contacto" aria-labelledby="titulo-contacto" class="seccion sobre-oscuro bg-basalto text-cal">
+  <div class="wrap grid gap-14 lg:grid-cols-12 lg:gap-8">
+    <div class="flex flex-col lg:col-span-6">
+      <p class="etiqueta">Contacto</p>
+      <h2 id="titulo-contacto" class="mt-5 font-serif text-[clamp(2.75rem,1.4rem+4.4vw,5.25rem)] leading-[0.95] tracking-[-0.02em]">
+        Cotiza tu sistema por WhatsApp
       </h2>
-      <p class="mt-4 max-w-[40ch] text-lg leading-relaxed text-muted">
-        Te respondemos por WhatsApp en menos de 2 horas hábiles.
+      <p class="mt-7 max-w-[30rem] text-lg leading-relaxed text-[#dedad0]">
+        Te atiende directamente {empresa.atiende} de {empresa.nombre}. Escríbenos con tu recibo de CFE a la mano.
       </p>
-      <ul class="mt-8 flex flex-col gap-4 text-[17px]">
-        <li class="flex items-center gap-3">
-          <span class="grid size-10 place-items-center rounded-full bg-lima text-bosque">
-            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"></path>
-            </svg>
-          </span>
-          {empresa.telefono}
-        </li>
-        <li class="flex items-center gap-3">
-          <span class="grid size-10 place-items-center rounded-full bg-lima text-bosque">
-            <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="M12 7v5l3 2"></path>
-            </svg>
-          </span>
-          {empresa.horario}
-        </li>
-      </ul>
+
+      <div class="mt-12 lg:mt-auto lg:pt-12">
+        <p class="etiqueta">WhatsApp</p>
+        <a href={wa} class="numero mt-3 inline-flex min-h-11 items-center" data-wa-general>{empresa.whatsapp.visible}</a>
+      </div>
     </div>
 
+    <!-- Sin JavaScript abre el chat (wa.me ignora los campos); con JavaScript prepara el mensaje. -->
     <form
-      id="form-cotiza"
-      data-wa={empresa.whatsapp}
-      class="flex flex-col gap-4 rounded-2xl border border-edge bg-white p-8 text-pino shadow-sm"
+      id="form-contacto"
+      action={`https://wa.me/${empresa.whatsapp.numero}`}
+      method="get"
+      target="_blank"
+      novalidate
+      class="formulario grid gap-5 lg:col-span-5 lg:col-start-8"
+      aria-labelledby="titulo-form-contacto"
     >
-      <label class="flex flex-col gap-1.5 text-base font-medium">
-        Nombre
-        <input
-          name="nombre"
-          type="text"
-          required
-          autocomplete="name"
-          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3.5 text-[17px]"
-        />
+      <div class="flex items-baseline justify-between gap-4 border-b border-linea-fuerte pb-4">
+        <h3 id="titulo-form-contacto" class="font-serif text-[1.75rem] leading-tight">Prepara tu mensaje</h3>
+        <span class="hidden font-mono text-[0.8125rem] text-tinta-2 sm:inline">Se abre en WhatsApp</span>
+      </div>
+
+      <div>
+        <label for="c-nombre" class="campo-etiqueta">Nombre</label>
+        <input id="c-nombre" name="nombre" type="text" autocomplete="name" required class="campo" aria-describedby="c-nombre-error" />
+        <p id="c-nombre-error" class="campo-error"></p>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <fieldset>
+          <legend class="campo-etiqueta">Es para</legend>
+          <div class="segmentado">
+            <label><input type="radio" name="tipo" value="casa" checked />Casa</label>
+            <label><input type="radio" name="tipo" value="negocio" />Negocio</label>
+          </div>
+        </fieldset>
+        <div>
+          <label for="c-municipio" class="campo-etiqueta">Municipio (opcional)</label>
+          <input id="c-municipio" name="municipio" type="text" autocomplete="address-level2" class="campo" />
+        </div>
+      </div>
+
+      <div>
+        <label for="c-mensaje" class="campo-etiqueta">Mensaje (opcional)</label>
+        <textarea id="c-mensaje" name="mensaje" rows="3" class="campo min-h-24 resize-y"></textarea>
+      </div>
+
+      <label id="c-incluir-fila" hidden class="flex min-h-11 cursor-pointer items-start gap-3 rounded-md bg-cal-2 p-3 text-[0.9375rem]">
+        <input id="c-incluir" name="incluir" type="checkbox" checked class="mt-1 size-4 shrink-0 accent-[#c2410c]" />
+        <span>Incluir mi estimación de la calculadora: <span id="c-resumen" class="font-mono text-sm"></span></span>
       </label>
-      <label class="flex flex-col gap-1.5 text-base font-medium">
-        WhatsApp
-        <input
-          name="telefono"
-          type="tel"
-          required
-          inputmode="tel"
-          autocomplete="tel"
-          pattern="[0-9 +()\-]{10,16}"
-          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3.5 text-[17px]"
-        />
-      </label>
-      <label class="flex flex-col gap-1.5 text-base font-medium">
-        Municipio
-        <select
-          name="municipio"
-          required
-          class="min-h-12 rounded-lg border border-pino/40 bg-white px-3 text-[17px]"
-        >
-          <option value="">Elige tu municipio</option>
-          {empresa.zona.map((z) => <option value={z}>{z}</option>)}
-          <option value="Otro">Otro</option>
-        </select>
-      </label>
-      <button
-        type="submit"
-        class="min-h-12 cursor-pointer rounded-lg bg-bosque px-5 text-[17px] font-semibold text-white"
-      >
-        Solicitar cotización
-      </button>
-      <p class="text-sm leading-snug text-[#2d3b37]">
-        Al enviar aceptas el <a href="#" class="underline">aviso de privacidad</a>.
+
+      <button type="submit" class="btn btn-primario w-full">Cotizar por WhatsApp</button>
+      <p id="c-estado" role="status" class="text-sm font-medium text-valle empty:hidden"></p>
+      <p class="text-sm leading-snug text-tinta-2">
+        Se abre WhatsApp con tu mensaje listo y tú decides cuándo enviarlo. Este sitio no guarda tus datos. Consulta el
+        <a href="/aviso-de-privacidad" class="enlace">aviso de privacidad</a>.
       </p>
     </form>
   </div>
 </section>
 
 <script>
-  const form = document.getElementById("form-cotiza") as HTMLFormElement;
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const d = new FormData(form);
-    const msg = `Hola, soy ${d.get("nombre")} de ${d.get("municipio")}. Quiero cotizar paneles solares. Mi WhatsApp: ${d.get("telefono")}.`;
-    window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
-  });
+  import { empresa } from "../data/empresa";
+  import { formatoNumero } from "../lib/calculo";
+  import { mensajeContacto, urlWhatsApp, type TipoCliente } from "../lib/whatsapp";
+  import { abrirWhatsApp, alCambiarCalculo, leerCalculo, type CalculoGuardado } from "../lib/navegador";
+
+  const form = document.getElementById("form-contacto") as HTMLFormElement | null;
+  if (form) {
+    const nombre = form.querySelector<HTMLInputElement>("#c-nombre")!;
+    const nombreError = form.querySelector<HTMLElement>("#c-nombre-error")!;
+    const municipio = form.querySelector<HTMLInputElement>("#c-municipio")!;
+    const fila = form.querySelector<HTMLElement>("#c-incluir-fila")!;
+    const resumen = form.querySelector<HTMLElement>("#c-resumen")!;
+    const estado = form.querySelector<HTMLElement>("#c-estado")!;
+
+    const pintarCalculo = (c: CalculoGuardado | null) => {
+      fila.hidden = !c;
+      if (!c) return;
+      resumen.textContent = `${formatoNumero(c.datos.kwh ?? 0)} kWh → ~${formatoNumero(c.estimacion.kwp, 1)} kWp, ~${c.estimacion.paneles} paneles`;
+      // Conserva lo que la persona ya escribió en la calculadora, sin pisar lo escrito aquí.
+      if (c.datos.municipio && !municipio.value.trim()) municipio.value = c.datos.municipio;
+      if (c.datos.tipo) {
+        const r = form.querySelector<HTMLInputElement>(`input[name="tipo"][value="${c.datos.tipo}"]`);
+        if (r) r.checked = true;
+      }
+    };
+    pintarCalculo(leerCalculo());
+    alCambiarCalculo(pintarCalculo);
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const f = new FormData(form);
+      const n = String(f.get("nombre") ?? "").trim();
+      if (!n) {
+        nombre.setAttribute("aria-invalid", "true");
+        nombreError.textContent = "Escribe tu nombre para presentarte en el mensaje.";
+        estado.textContent = "Falta un dato.";
+        nombre.focus();
+        return;
+      }
+      nombre.setAttribute("aria-invalid", "false");
+      nombreError.textContent = "";
+
+      const calculo = f.get("incluir") && !fila.hidden ? leerCalculo() : null;
+      const texto = mensajeContacto(
+        empresa.nombre,
+        {
+          nombre: n,
+          tipo: (f.get("tipo") as TipoCliente) ?? null,
+          municipio: String(f.get("municipio") ?? "").trim() || null,
+          mensaje: String(f.get("mensaje") ?? "").trim() || null,
+        },
+        calculo,
+      );
+      abrirWhatsApp(urlWhatsApp(empresa.whatsapp.numero, texto));
+      estado.textContent = "Abrimos WhatsApp con tu mensaje. Revísalo y envíalo desde ahí.";
+    });
+  }
 </script>
+
+<style>
+  .numero {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--color-cal);
+    background-image: linear-gradient(var(--color-tezontle), var(--color-tezontle));
+    background-size: 100% 3px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 0.25rem;
+    transition: background-size 260ms var(--ease-oficio);
+  }
+  .numero:hover {
+    background-size: 100% 8px;
+  }
+  .formulario {
+    border-radius: 6px;
+    background: var(--color-cal);
+    color: var(--color-basalto);
+    padding: 1.5rem 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .formulario { padding: 2rem; }
+  }
+  .formulario :global(:focus-visible) {
+    outline-color: var(--color-tezontle);
+  }
+</style>
