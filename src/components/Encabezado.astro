@@ -1,0 +1,139 @@
+---
+import { empresa } from "../data/empresa";
+import { urlWhatsApp } from "../lib/whatsapp";
+import Marca from "./Marca.astro";
+
+const enInicio = Astro.url.pathname === "/" || Astro.url.pathname === "";
+const pre = enInicio ? "" : "/";
+const enlaces = [
+  { href: `${pre}#calculadora`, t: "Calculadora" },
+  { href: `${pre}#servicio`, t: "Servicio" },
+  { href: `${pre}#como-funciona`, t: "Cómo funciona" },
+  { href: `${pre}#proceso`, t: "Proceso" },
+  { href: `${pre}#preguntas`, t: "Preguntas" },
+];
+const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Quiero cotizar un sistema fotovoltaico interconectado.`);
+---
+
+<header class="sticky top-0 z-40 border-b border-linea bg-cal pt-[env(safe-area-inset-top)]">
+  <div class="wrap relative flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-3 focus:z-50 focus:rounded-md focus:bg-basalto focus:px-4 focus:py-2.5 focus:text-cal"
+    >
+      Saltar al contenido
+    </a>
+
+    <a href="/" class="flex min-h-11 shrink-0 items-center" aria-label={`${empresa.nombre}, inicio`}>
+      <Marca />
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-7 text-[0.9375rem] font-medium">
+        {enlaces.map((l) => <li><a href={l.href} class="enlace-nav">{l.t}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={wa} class="btn btn-primario max-[419px]:hidden" data-wa-general>
+        <span class="hidden sm:inline">Cotizar por WhatsApp</span>
+        <span class="sm:hidden">WhatsApp</span>
+      </a>
+      <!-- Sin JavaScript, el botón lleva al índice del pie de página; con JavaScript abre el menú. -->
+      <a
+        href="#indice"
+        id="menu-btn"
+        role="button"
+        aria-controls="menu"
+        aria-expanded="false"
+        class="btn btn-secundario size-12 px-0 lg:hidden"
+      >
+        <span class="sr-only" data-etiqueta>Abrir menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path class="ico-abrir" d="M4 7h16M4 12h16M4 17h16"></path>
+          <path class="ico-cerrar" d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div id="menu" hidden class="fixed inset-x-0 bottom-0 top-[calc(4rem+env(safe-area-inset-top))] z-40 overflow-y-auto border-t border-linea bg-cal lg:hidden">
+    <nav aria-label="Menú móvil" class="wrap py-4">
+      <ul class="flex flex-col">
+        {
+          enlaces.map((l) => (
+            <li>
+              <a href={l.href} class="flex min-h-14 items-center border-b border-linea font-serif text-[1.75rem]">
+                {l.t}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={wa} class="btn btn-primario mt-6 w-full">Cotizar por WhatsApp</a>
+      <p class="etiqueta mt-4">WhatsApp {empresa.whatsapp.visible}</p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .ico-cerrar,
+  [aria-expanded="true"] .ico-abrir {
+    display: none;
+  }
+  [aria-expanded="true"] .ico-cerrar {
+    display: inline;
+  }
+  .enlace-nav {
+    position: relative;
+    padding-block: 0.5rem;
+  }
+  .enlace-nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.25rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 220ms var(--ease-oficio);
+  }
+  .enlace-nav:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("menu");
+  if (btn && menu) {
+    const etiqueta = btn.querySelector("[data-etiqueta]");
+    const set = (abierto: boolean) => {
+      menu.hidden = !abierto;
+      btn.setAttribute("aria-expanded", String(abierto));
+      if (etiqueta) etiqueta.textContent = abierto ? "Cerrar menú" : "Abrir menú";
+      document.documentElement.style.overflow = abierto ? "hidden" : "";
+    };
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      set(menu.hidden);
+    });
+    btn.addEventListener("keydown", (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        set(menu.hidden);
+      }
+    });
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => set(false)));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !menu.hidden) {
+        set(false);
+        btn.focus();
+      }
+    });
+    matchMedia("(min-width: 1024px)").addEventListener("change", (m) => m.matches && set(false));
+  }
+</script>

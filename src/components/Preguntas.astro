@@ -1,0 +1,63 @@
+---
+import { empresa } from "../data/empresa";
+import { urlWhatsApp } from "../lib/whatsapp";
+
+/* Solo respuestas confirmadas o técnicamente generales. Baterías, costos y tiempos: pendientes. */
+const preguntas = [
+  { p: "¿Qué tipo de sistemas instalan?", r: `Sistemas fotovoltaicos interconectados a la red de CFE, para casas y negocios en ${empresa.region}.` },
+  { p: "¿Instalan sistemas autónomos o de bombeo solar?", r: "No. No ofrecemos sistemas autónomos aislados de la red ni sistemas de bombeo solar." },
+  { p: "¿Sigo conectado a CFE?", r: "Sí. Un sistema interconectado trabaja junto con la red: tomas energía de ella cuando tus paneles no producen o no alcanzan." },
+  { p: "¿Cómo se refleja en mi recibo?", r: "Depende del esquema de interconexión que aplique a tu contrato con CFE. Te lo explicamos con tu recibo." },
+  { p: "¿Dónde encuentro mi consumo en kWh?", r: "En tu recibo de CFE, en la cifra de consumo del periodo acompañada de la unidad kWh. Si no la encuentras, mándanos una foto del recibo por WhatsApp." },
+  { p: "¿La calculadora me da una cotización?", r: "No. Da una estimación orientativa del tamaño del sistema a partir de tu consumo. El sistema y el precio se definen después de revisar tu inmueble." },
+];
+const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Tengo una pregunta sobre los sistemas interconectados.`);
+---
+
+<section id="preguntas" aria-labelledby="titulo-preguntas" class="seccion bg-cal-2">
+  <div class="wrap grid gap-12 lg:grid-cols-12 lg:gap-8">
+    <div class="lg:col-span-4">
+      <div class="lg:sticky lg:top-28">
+        <p class="etiqueta">Preguntas</p>
+        <h2 id="titulo-preguntas" class="titulo-2 mt-5">Preguntas frecuentes</h2>
+        <p class="mt-6 max-w-[22rem] text-base leading-relaxed text-tinta-2">
+          ¿Tu pregunta no está aquí? Escríbenos y te responde {empresa.atiende}.
+        </p>
+        <a href={wa} class="btn btn-secundario mt-6" data-wa-general>Preguntar por WhatsApp</a>
+      </div>
+    </div>
+    <dl class="lg:col-span-8 border-t border-basalto">
+      {
+        preguntas.map((q, i) => (
+          <div class="pregunta">
+            <span class="pregunta-idx" aria-hidden="true">P.{String(i + 1).padStart(2, "0")}</span>
+            <dt class="font-serif text-[clamp(1.5rem,1.25rem+0.7vw,1.875rem)] leading-snug">{q.p}</dt>
+            <dd class="mt-3 max-w-[40rem] text-base leading-relaxed text-tinta-2">{q.r}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .pregunta {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--color-linea);
+  }
+  @media (min-width: 768px) {
+    .pregunta {
+      grid-template-columns: 4.5rem 1fr;
+      column-gap: 1rem;
+    }
+    .pregunta dd { grid-column: 2; }
+  }
+  .pregunta-idx {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-tezontle-2);
+    padding-top: 0.5rem;
+  }
+</style>

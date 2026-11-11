@@ -1,26 +1,23 @@
+/**
+ * Datos de la empresa. Aquí solo van datos CONFIRMADOS por el propietario.
+ *
+ * Pendientes de validar (no se publican hasta tenerlos):
+ * - Municipios concretos de cobertura (hoy solo "Michoacán").
+ * - Si se ofrecen sistemas interconectados con almacenamiento (baterías).
+ * - Esquema(s) de interconexión con los que se trabaja.
+ * - Quién gestiona el trámite de interconexión con CFE.
+ * - Costo de la visita técnica, tiempos de instalación y de respuesta.
+ * - Horario, correo, dirección, razón social, logotipo, fotografías propias.
+ */
 export const empresa = {
-  datosDeEjemplo: true,
-  nombre: "Valle Solar",
-  lema: "Energía inteligente. Un futuro más eficiente.",
-  ciudad: "Zamora de Hidalgo, Michoacán",
-  zona: ["Zamora", "Jacona", "Tangancícuaro", "Sahuayo", "Jiquilpan", "La Piedad"],
-  telefono: "351 000 0000",
-  whatsapp: "523510000000",
-  correo: "contacto@ejemplo.mx",
-  horario: "Lun a Sáb, 9:00 a 18:00",
-  metricas: {
-    sistemas: 420,
-    calificacion: 4.9,
-    resenas: 86,
-    cuadrillas: 4,
-    garantiaPaneles: 25,
+  nombre: "Solar Service Mx",
+  servicio: "Instalación de sistemas fotovoltaicos interconectados a la red de CFE",
+  region: "Michoacán",
+  whatsapp: {
+    /** Formato para mostrar en pantalla. */
+    visible: "+52 33 1706 1726",
+    /** Formato internacional sin signos, para wa.me y tel:. */
+    numero: "523317061726",
   },
-  calculo: {
-    tarifa: 4.2,
-    horasSol: 5.2,
-    eficiencia: 0.8,
-    potenciaPanelW: 550,
-    ahorroMin: 0.85,
-    ahorroMax: 0.92,
-  },
-};
+  atiende: "el responsable comercial y técnico",
+} as const;

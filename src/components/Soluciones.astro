@@ -1,0 +1,240 @@
+---
+/**
+ * Casas y negocios. Cada tarjeta tiene un espacio para una fotografía real (src/config/sitio.ts → fotos);
+ * mientras no exista, muestra una ilustración técnica en alzado.
+ */
+import { empresa } from "../data/empresa";
+import { sitio } from "../config/sitio";
+import { urlWhatsApp } from "../lib/whatsapp";
+
+const waNegocio = urlWhatsApp(
+  empresa.whatsapp.numero,
+  `Hola, ${empresa.nombre}. Quiero cotizar un sistema fotovoltaico interconectado para mi negocio.`,
+);
+const { casa: fotoCasa, negocio: fotoNegocio } = sitio.fotos;
+---
+
+<section id="soluciones" aria-labelledby="titulo-soluciones" class="seccion bg-cal-2">
+  <div class="wrap">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-8">
+      <div class="lg:col-span-7">
+        <p class="etiqueta">Residencial y comercial</p>
+        <h2 id="titulo-soluciones" class="titulo-2 mt-5">Sistemas para casas y para negocios</h2>
+      </div>
+      <p class="max-w-[30rem] text-lg leading-relaxed text-tinta-2 lg:col-span-5">
+        El mismo tipo de sistema, dimensionado según el consumo de cada inmueble.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-2">
+      <!-- Casa -->
+      <article class="solucion solucion-clara">
+        <div class="solucion-visual">
+          {
+            fotoCasa ? (
+              <img src={fotoCasa.src} alt={fotoCasa.alt} width={fotoCasa.ancho} height={fotoCasa.alto} loading="lazy" class="h-full w-full object-cover" />
+            ) : (
+              <svg viewBox="0 0 560 300" class="ilustracion" aria-hidden="true">
+                <path d="M20 270H540" class="suelo" />
+                <path d="M110 270V160H370V270" class="muro" />
+                <path d="M86 162L240 74L394 162" class="cubierta" />
+                <g transform="translate(240 74) rotate(29.74)">
+                  {[22, 66, 110].map((x) => (
+                    <g transform={`translate(${x} -15)`}>
+                      <rect width="40" height="9" rx="1" class="modulo" />
+                      <path d="M8 9V15M32 9V15" class="pata" />
+                    </g>
+                  ))}
+                </g>
+                <path d="M160 270V214H204V270" class="muro" />
+                <path d="M260 196H330V236H260Z M295 196V236" class="fino" />
+                <path d="M432 270V230M432 230c-18 0-26-16-26-30 0-16 12-28 26-28s26 12 26 28c0 14-8 30-26 30z" class="fino" />
+                <circle cx="470" cy="70" r="16" class="sol" />
+                <path d="M20 286H540" class="cota" />
+                <text x="280" y="296" text-anchor="middle" class="cota-texto">Casa · ilustración</text>
+              </svg>
+            )
+          }
+        </div>
+        <div class="solucion-cuerpo">
+          <p class="etiqueta">Residencial</p>
+          <h3 class="solucion-titulo">Casa</h3>
+          <p class="solucion-texto">
+            Para hogares con contrato de CFE. Con el consumo en kWh de tu recibo obtienes un tamaño orientativo de sistema y
+            nos lo mandas por WhatsApp.
+          </p>
+          <dl class="solucion-datos">
+            <div><dt>Recibo</dt><dd>Bimestral o mensual</dd></div>
+            <div><dt>Dato clave</dt><dd>Consumo en kWh</dd></div>
+          </dl>
+          <a href="#calculadora" class="btn btn-secundario mt-8 self-start" data-tipo-calculadora="casa">Calcular para mi casa</a>
+        </div>
+      </article>
+
+      <!-- Negocio -->
+      <article class="solucion solucion-oscura sobre-oscuro">
+        <div class="solucion-visual">
+          {
+            fotoNegocio ? (
+              <img src={fotoNegocio.src} alt={fotoNegocio.alt} width={fotoNegocio.ancho} height={fotoNegocio.alto} loading="lazy" class="h-full w-full object-cover" />
+            ) : (
+              <svg viewBox="0 0 560 300" class="ilustracion" aria-hidden="true">
+                <path d="M20 270H540" class="suelo" />
+                <path d="M70 270V150L280 118L490 150V270" class="muro" />
+                <path d="M60 152L280 118L500 152" class="cubierta" />
+                <g transform="translate(280 118) rotate(8.8)">
+                  {[16, 62, 108, 154].map((x) => (
+                    <g transform={`translate(${x} -13)`}>
+                      <rect width="40" height="8" rx="1" class="modulo" />
+                    </g>
+                  ))}
+                </g>
+                <g transform="translate(280 118) scale(-1 1) rotate(8.8)">
+                  {[16, 62, 108, 154].map((x) => (
+                    <g transform={`translate(${x} -13)`}>
+                      <rect width="40" height="8" rx="1" class="modulo" />
+                    </g>
+                  ))}
+                </g>
+                <path d="M120 270V200H220V270M120 214H220M120 228H220M120 242H220M120 256H220" class="fino" />
+                <path d="M300 190H440V170H300Z" class="fino" />
+                <path d="M270 270V214H300V270" class="muro" />
+                <path d="M20 286H540" class="cota" />
+                <text x="280" y="296" text-anchor="middle" class="cota-texto">Negocio · ilustración</text>
+              </svg>
+            )
+          }
+        </div>
+        <div class="solucion-cuerpo">
+          <p class="etiqueta">Comercial</p>
+          <h3 class="solucion-titulo">Negocio</h3>
+          <p class="solucion-texto">
+            Para comercios y empresas conectados a CFE. Revisamos tu consumo para proponer un sistema acorde a la forma en
+            que usas la energía.
+          </p>
+          <dl class="solucion-datos">
+            <div><dt>Recibo</dt><dd>Mensual o bimestral</dd></div>
+            <div><dt>Dato clave</dt><dd>Consumo en kWh</dd></div>
+          </dl>
+          <a href={waNegocio} class="btn btn-secundario mt-8 self-start">Cotizar mi negocio por WhatsApp</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .solucion {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid var(--color-basalto);
+  }
+  .solucion-clara {
+    background: var(--color-cal);
+  }
+  .solucion-oscura {
+    background: var(--color-basalto);
+    color: var(--color-cal);
+  }
+  .solucion-visual {
+    aspect-ratio: 560 / 300;
+    border-bottom: 1px solid currentColor;
+    overflow: hidden;
+  }
+  .solucion-clara .solucion-visual {
+    background-color: #f8f6ef;
+    background-image:
+      linear-gradient(rgb(47 74 58 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(47 74 58 / 0.07) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .solucion-oscura .solucion-visual {
+    border-bottom-color: rgb(243 240 232 / 0.3);
+    background-color: #1d1c15;
+    background-image:
+      linear-gradient(rgb(243 240 232 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(243 240 232 / 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .ilustracion {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .ilustracion :is(.suelo, .muro, .cubierta, .fino, .cota, .pata) {
+    fill: none;
+    stroke: currentColor;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .ilustracion .suelo { stroke-width: 1.5; }
+  .ilustracion .muro { stroke-width: 1.6; }
+  .ilustracion .cubierta { stroke-width: 2; }
+  .ilustracion .fino { stroke-width: 1.2; stroke-opacity: 0.6; }
+  .ilustracion .pata { stroke-width: 1.2; }
+  .ilustracion .cota { stroke-width: 1; stroke-opacity: 0.35; stroke-dasharray: 4 4; }
+  .ilustracion .modulo { fill: var(--color-tezontle); stroke: currentColor; stroke-width: 1; }
+  .ilustracion .sol { fill: var(--color-tezontle); }
+  .ilustracion .cota-texto {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    fill: currentColor;
+    opacity: 0.6;
+  }
+  .solucion-clara .ilustracion { color: var(--color-basalto); }
+  .solucion-oscura .ilustracion { color: var(--color-cal); }
+
+  .solucion-cuerpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.75rem 1.5rem 2rem;
+  }
+  @media (min-width: 640px) {
+    .solucion-cuerpo { padding: 2.25rem 2.5rem 2.5rem; }
+  }
+  .solucion-titulo {
+    margin-top: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 1.6rem + 1.2vw, 2.75rem);
+    line-height: 1;
+  }
+  .solucion-texto {
+    margin-top: 1rem;
+    max-width: 32rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-tinta-2);
+  }
+  .solucion-oscura .solucion-texto { color: #dedad0; }
+  .solucion-datos {
+    margin-top: 1.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--color-linea);
+  }
+  .solucion-oscura .solucion-datos { border-top-color: var(--color-linea-clara); }
+  .solucion-datos > div {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-linea);
+  }
+  .solucion-oscura .solucion-datos > div { border-bottom-color: var(--color-linea-clara); }
+  .solucion-datos > div + div {
+    padding-left: 1rem;
+    border-left: 1px solid var(--color-linea);
+  }
+  .solucion-oscura .solucion-datos > div + div { border-left-color: var(--color-linea-clara); }
+  .solucion-datos dt {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-tinta-2);
+  }
+  .solucion-oscura .solucion-datos dt { color: #c9c4b8; }
+  .solucion-datos dd {
+    margin-top: 0.25rem;
+    font-size: 0.9688rem;
+    font-weight: 500;
+  }
+</style>

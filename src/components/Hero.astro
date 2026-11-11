@@ -1,245 +1,79 @@
 ---
 import { empresa } from "../data/empresa";
+import { urlWhatsApp } from "../lib/whatsapp";
+import Calculadora from "./Calculadora.astro";
+import PerfilValle from "./PerfilValle.astro";
 
-const cfg = JSON.stringify(empresa.calculo);
-const wa = `https://wa.me/${empresa.whatsapp}?text=${encodeURIComponent("Hola, quiero cotizar paneles solares.")}`;
+const wa = urlWhatsApp(empresa.whatsapp.numero, `Hola, ${empresa.nombre}. Quiero cotizar un sistema fotovoltaico interconectado.`);
 ---
 
-<section id="hero" data-cfg={cfg} class="bg-bg text-fg">
-  <div class="mx-auto max-w-[1240px] px-6 pb-20 pt-12 md:px-12 md:pb-24 md:pt-16">
-    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-      <div>
-        <h1
-          class="hero-in max-w-[14ch] text-[clamp(2.5rem,5.6vw,4.75rem)] font-semibold leading-[1.02] tracking-tight"
-        >
-          Calcula cuánto ahorras con paneles solares
-        </h1>
-        <p class="hero-in mt-5 max-w-[44ch] text-lg leading-relaxed text-muted">
-          Mueve el control a tu recibo bimestral y mira cómo se llena tu techo. Sin llamadas insistentes.
-        </p>
+<section id="inicio" aria-labelledby="titulo-inicio" class="relative overflow-hidden">
+  <div class="wrap grid gap-12 pb-10 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-x-8 lg:pb-6 lg:pt-14">
+    <!-- Texto -->
+    <div class="flex flex-col lg:col-span-5" data-enter>
+      <p class="etiqueta flex items-center gap-3" style="--i:0">
+        <span class="inline-block h-px w-8 bg-basalto"></span>
+        {empresa.region} · Instalación fotovoltaica
+      </p>
+      <h1
+        id="titulo-inicio"
+        class="mt-6 font-serif text-[clamp(3rem,1.6rem+4.6vw,5.5rem)] leading-[0.94] tracking-[-0.02em]"
+        style="--i:1"
+      >
+        Paneles solares <em class="italic text-valle">interconectados</em> a&nbsp;CFE para casas y negocios
+      </h1>
+      <p class="mt-7 max-w-[30rem] text-lg leading-relaxed text-tinta-2" style="--i:2">
+        Instalamos sistemas fotovoltaicos conectados a la red de CFE. Tu techo produce parte de la electricidad que
+        consumes y una parte menor de tu dinero se va al recibo.
+      </p>
 
-        <div class="hero-in mt-7 flex max-w-[520px] flex-col gap-5 rounded-2xl border border-edge bg-card p-6">
-          <div class="flex items-baseline justify-between gap-3">
-            <label for="rng" class="text-base font-medium">Tu recibo bimestral</label>
-            <div id="bill" class="text-[28px] font-semibold tabular-nums">$ 4,800</div>
-          </div>
-          <input
-            id="rng"
-            type="range"
-            min="800"
-            max="10000"
-            step="100"
-            value="4800"
-            aria-describedby="nota"
-            class="h-11 w-full cursor-pointer accent-lit"
-          />
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <div class="text-[15px] text-muted">Paneles</div>
-              <div class="text-[28px] font-semibold leading-tight">
-                <span id="o-pan" class="odo" aria-hidden="true"></span>
-              </div>
-            </div>
-            <div>
-              <div class="text-[15px] text-muted">Sistema</div>
-              <div id="kw" class="text-[28px] font-semibold leading-tight tabular-nums">0 kW</div>
-            </div>
-          </div>
-          <div>
-            <div class="text-[15px] text-muted">Ahorro estimado por bimestre</div>
-            <div
-              class="whitespace-nowrap text-[clamp(1.9rem,4.2vw,3rem)] font-bold leading-tight text-lit"
-              aria-hidden="true"
-            >
-              $<span id="o-lo" class="odo"></span> a $<span id="o-hi" class="odo"></span>
-            </div>
-          </div>
-          <div class="flex flex-wrap gap-3">
-            <a
-              href={wa}
-              class="inline-flex min-h-12 items-center justify-center rounded-lg bg-acento px-5 text-[17px] font-semibold text-acento-fg"
-            >
-              Recibir mi cotización por WhatsApp
-            </a>
-            <a
-              href="#contacto"
-              class="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-fg px-5 text-[17px] font-semibold"
-            >
-              Hablar con un asesor
-            </a>
-          </div>
-          <p id="nota" class="text-sm leading-snug text-muted">
-            Estimación orientativa con datos de ejemplo. Tarifa, irradiación y precios se definen con la empresa; la cifra final se confirma en una visita técnica.
-          </p>
+      <div class="mt-8 flex flex-wrap gap-3" style="--i:3">
+        <a href="#calculadora" class="btn btn-primario w-full sm:w-auto lg:hidden">Calcular mi sistema</a>
+        <a href="#como-funciona" class="btn btn-secundario hidden lg:inline-flex">Ver cómo funciona</a>
+      </div>
+
+      <dl class="ficha mt-10 lg:mt-auto lg:pt-10" style="--i:4">
+        <div><dt>Servicio</dt><dd>Solo sistemas interconectados a CFE</dd></div>
+        <div><dt>Clientes</dt><dd>Casas y negocios</dd></div>
+        <div><dt>Cobertura</dt><dd>{empresa.region}</dd></div>
+        <div>
+          <dt>WhatsApp</dt>
+          <dd><a href={wa} class="enlace inline-flex min-h-11 items-center font-mono font-medium" data-wa-general>{empresa.whatsapp.visible}</a></dd>
         </div>
-
-        <p class="hero-in mt-7 text-lg text-muted">{empresa.lema}</p>
-      </div>
-
-      <div>
-        <svg
-          id="scene"
-          viewBox="0 0 640 420"
-          role="img"
-          aria-label="Casa con paneles solares en el techo que se iluminan según tu recibo"
-          class="block h-auto w-full"
-        >
-          <g fill="none" stroke="var(--line)" stroke-width="1.5" stroke-linejoin="round">
-            <path class="draw" pathLength="1" d="M20 380H620"></path>
-            <path class="draw" pathLength="1" d="M110 250L540 210V380H110Z"></path>
-            <path class="draw" pathLength="1" d="M130 120L520 90L540 210L110 250Z"></path>
-            <path class="draw w" pathLength="1" d="M150 290H290V360H150Z"></path>
-            <path class="draw" pathLength="1" d="M220 290V360"></path>
-            <path class="draw" pathLength="1" d="M340 275H395V380H340Z"></path>
-            <path class="draw w" pathLength="1" d="M440 270H500V330H440Z"></path>
-          </g>
-          <g id="panels"></g>
-        </svg>
-        <p id="cap" class="mt-2 text-right text-sm text-muted">Techo de ejemplo con hasta 20 paneles</p>
-      </div>
+      </dl>
     </div>
 
-    <div id="live" class="sr-only" aria-live="polite"></div>
+    <!-- Lámina con la calculadora -->
+    <div class="lg:col-span-7 lg:pl-6 xl:pl-10" data-enter>
+      <div style="--i:2" class="pb-[10px] pr-[10px]">
+        <Calculadora />
+      </div>
+    </div>
   </div>
+
+  <PerfilValle class="mt-2" />
 </section>
 
-<style is:global>
-  #hero {
-    --bg: #101c1a;
-    --fg: #ffffff;
-    --line: #c6e36b;
-    --lit: #c6e36b;
-    --sol: #c6e36b;
-    --accent: #c6e36b;
-    --accent-fg: #101c1a;
-    --card: #173d35;
-    --muted: #d5e0db;
-    --edge: rgba(255, 255, 255, 0.2);
+<style>
+  .ficha {
+    display: grid;
+    border-top: 1px solid var(--color-basalto);
   }
-  .js .hero-in { opacity: 0; }
-  .draw { stroke-dasharray: 1; }
-  .js .draw { stroke-dashoffset: 1; }
-  .w { fill: var(--sol); fill-opacity: var(--glow, 0); transition: fill-opacity 0.6s; }
-  .p {
-    fill: var(--sol);
-    fill-opacity: 0;
-    stroke: var(--line);
-    stroke-opacity: 0.4;
-    stroke-width: 1.2;
-    transition: fill-opacity 0.4s, stroke-opacity 0.4s;
+  .ficha > div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.875rem;
+    border-bottom: 1px solid var(--color-linea);
   }
-  .p.on { fill-opacity: 0.85; stroke-opacity: 1; }
-  .odo { display: inline-flex; font-variant-numeric: tabular-nums; line-height: 1.1; vertical-align: top; }
-  .odo .d { display: inline-block; width: 1ch; height: 1.1em; overflow: hidden; }
-  .odo .r { display: flex; flex-direction: column; transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .odo .r span { height: 1.1em; line-height: 1.1em; text-align: center; }
-  .odo .s { display: inline-block; height: 1.1em; line-height: 1.1em; }
-  :focus-visible { outline: 3px solid var(--lit); outline-offset: 3px; }
+  .ficha dt {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-tinta-2);
+  }
+  .ficha dd {
+    font-size: 0.9688rem;
+    font-weight: 500;
+  }
 </style>
-
-<script>
-  import { animate, createTimeline, stagger } from "animejs";
-  import { calcular } from "../lib/calculo";
-
-  const root = document.getElementById("hero")!;
-  const cfg = JSON.parse(root.dataset.cfg!);
-  const el = (id: string) => document.getElementById(id)!;
-  const svg = el("scene") as unknown as SVGSVGElement;
-  const rng = el("rng") as HTMLInputElement;
-  const SLOTS = 20;
-  const NS = "http://www.w3.org/2000/svg";
-
-  // Techo: cuadrilátero y paneles por interpolación bilineal
-  const Q = { TL: [130, 120], TR: [520, 90], BR: [540, 210], BL: [110, 250] };
-  const pt = (u: number, v: number) =>
-    [0, 1].map(
-      (k) =>
-        Q.TL[k] * (1 - u) * (1 - v) + Q.TR[k] * u * (1 - v) + Q.BR[k] * u * v + Q.BL[k] * (1 - u) * v,
-    );
-  const orden: [number, number][] = [];
-  for (let c = 0; c < 5; c++) for (let r = 3; r >= 0; r--) orden.push([c, r]);
-  const celdas = orden.map(([c, r]) => {
-    const u0 = 0.05 + c * 0.18 + 0.012;
-    const u1 = 0.05 + (c + 1) * 0.18 - 0.012;
-    const v0 = 0.08 + r * 0.21 + 0.02;
-    const v1 = 0.08 + (r + 1) * 0.21 - 0.02;
-    const p = document.createElementNS(NS, "path");
-    const d = [pt(u0, v0), pt(u1, v0), pt(u1, v1), pt(u0, v1)]
-      .map((a) => a.map((x) => x.toFixed(1)).join(" "))
-      .join("L");
-    p.setAttribute("d", `M${d}Z`);
-    p.setAttribute("class", "p");
-    el("panels").appendChild(p);
-    return p;
-  });
-
-  // Cifras rodantes (odómetro)
-  function setDigits(box: HTMLElement, s: string) {
-    for (let k = 0; k < s.length; k++) {
-      if (/\d/.test(s[k])) {
-        const col = (box.children[k] as HTMLElement).firstElementChild as HTMLElement;
-        col.style.transform = `translateY(${-Number(s[k]) * 1.1}em)`;
-      }
-    }
-  }
-  function roll(box: HTMLElement, s: string) {
-    if (box.dataset.len === String(s.length)) {
-      setDigits(box, s);
-      return;
-    }
-    box.dataset.len = String(s.length);
-    box.innerHTML = "";
-    for (const ch of s) {
-      const n = document.createElement("span");
-      if (/\d/.test(ch)) {
-        n.className = "d";
-        const col = document.createElement("span");
-        col.className = "r";
-        col.innerHTML = "0123456789".split("").map((x) => `<span>${x}</span>`).join("");
-        n.appendChild(col);
-      } else {
-        n.className = "s";
-        n.textContent = ch;
-      }
-      box.appendChild(n);
-    }
-    requestAnimationFrame(() => requestAnimationFrame(() => setDigits(box, s)));
-  }
-
-  const fmt = (n: number) => n.toLocaleString("es-MX");
-
-  function update(b: number) {
-    const k = calcular(b, cfg);
-    const n = Math.min(k.paneles, SLOTS);
-    el("bill").textContent = `$ ${fmt(b)}`;
-    roll(el("o-pan"), String(k.paneles));
-    roll(el("o-lo"), fmt(k.min));
-    roll(el("o-hi"), fmt(k.max));
-    el("kw").textContent = `${k.kw.toFixed(2)} kW`;
-    celdas.forEach((p, i) => {
-      p.style.transitionDelay = `${i < n ? i * 35 : 0}ms`;
-      p.classList.toggle("on", i < n);
-    });
-    svg.style.setProperty("--glow", String(Math.min(0.28, n * 0.02)));
-    el("cap").textContent =
-      k.paneles > SLOTS
-        ? `Se muestran 20 de ${k.paneles} paneles en este techo de ejemplo`
-        : "Techo de ejemplo con hasta 20 paneles";
-    el("live").textContent = `Recibo de ${fmt(b)} pesos: ${k.paneles} paneles, sistema de ${k.kw.toFixed(2)} kW, ahorro estimado de ${fmt(k.min)} a ${fmt(k.max)} pesos por bimestre.`;
-    rng.setAttribute("aria-valuetext", `$ ${fmt(b)} por bimestre`);
-  }
-
-  rng.addEventListener("input", () => update(Number(rng.value)));
-
-  // Secuencia de carga con anime.js
-  const inicial = () => update(Number(rng.value));
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.querySelectorAll<HTMLElement>(".hero-in").forEach((e) => (e.style.opacity = "1"));
-    document.querySelectorAll<SVGElement>(".draw").forEach((e) => (e.style.strokeDashoffset = "0"));
-    inicial();
-  } else {
-    createTimeline({ defaults: { ease: "outExpo" }, onComplete: inicial })
-      .add("#hero .hero-in", { opacity: [0, 1], y: [24, 0], delay: stagger(90), duration: 800 })
-      .add("#hero .draw", { strokeDashoffset: [1, 0], delay: stagger(120), duration: 1400, ease: "inOutCubic" }, 200);
-  }
-</script>

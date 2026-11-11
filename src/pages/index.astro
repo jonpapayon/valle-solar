@@ -1,26 +1,36 @@
 ---
 import Base from "../layouts/Base.astro";
-import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
-import Prueba from "../components/Prueba.astro";
-import Puertas from "../components/Puertas.astro";
+import Servicio from "../components/Servicio.astro";
+import Diagrama from "../components/Diagrama.astro";
+import Recibo from "../components/Recibo.astro";
+import Soluciones from "../components/Soluciones.astro";
 import Proceso from "../components/Proceso.astro";
+import Preguntas from "../components/Preguntas.astro";
 import Contacto from "../components/Contacto.astro";
-import Footer from "../components/Footer.astro";
-import WhatsAppFlotante from "../components/WhatsAppFlotante.astro";
 import { empresa } from "../data/empresa";
+
+const title = `${empresa.nombre}: paneles solares interconectados a CFE en ${empresa.region}`;
+const description = `Instalación de sistemas fotovoltaicos interconectados a la red de CFE para casas y negocios en ${empresa.region}. Calcula el tamaño aproximado con tu consumo en kWh y cotiza por WhatsApp.`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: empresa.nombre,
+  description: empresa.servicio,
+  telephone: `+${empresa.whatsapp.numero}`,
+  areaServed: { "@type": "State", name: empresa.region },
+  ...(Astro.site ? { url: Astro.site.href } : {}),
+};
 ---
 
-<Base
-  title={`${empresa.nombre} | Paneles solares en ${empresa.ciudad}`}
-  description={empresa.lema}
->
-  <Nav />
+<Base title={title} description={description} jsonLd={jsonLd}>
   <Hero />
-  <Prueba />
-  <Puertas />
+  <Servicio />
+  <Diagrama />
+  <Recibo />
+  <Soluciones />
   <Proceso />
+  <Preguntas />
   <Contacto />
-  <Footer />
-  <WhatsAppFlotante />
 </Base>

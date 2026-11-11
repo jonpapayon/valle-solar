@@ -1,61 +1,243 @@
 @import "tailwindcss";
 
+/* Oficio en el valle — tokens de marca aprobados */
 @theme {
-  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
-  --color-pino: #101c1a;
-  --color-bosque: #173d35;
-  --color-lima: #c6e36b;
-  --color-papel: #f5f5f0;
-}
+  --color-cal: #f3f0e8;
+  --color-cal-2: #e9e4d7;
+  --color-basalto: #16150f;
+  --color-tinta-2: #46423a; /* texto secundario: 8.8:1 sobre cal, 7.9:1 sobre cal-2 */
+  --color-valle: #2f4a3a;
+  --color-valle-2: #263d30;
+  --color-valle-tinta: #dce2d8; /* texto secundario sobre valle: 7.4:1 */
+  --color-tezontle: #c2410c;
+  --color-tezontle-2: #a3360a;
+  --color-linea: rgb(22 21 15 / 0.14);
+  --color-linea-fuerte: rgb(22 21 15 / 0.5);
+  --color-linea-clara: rgb(243 240 232 / 0.22);
 
-:root {
-  --bg: #ffffff;
-  --fg: #101c1a;
-  --line: #173d35;
-  --lit: #173d35;
-  --sol: #c6e36b;
-  --accent: #173d35;
-  --accent-fg: #ffffff;
-  --card: #f5f5f0;
-  --muted: #2d3b37;
-  --edge: rgba(16, 28, 26, 0.16);
+  --ease-oficio: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-fg: var(--fg);
-  --color-line: var(--line);
-  --color-lit: var(--lit);
-  --color-sol: var(--sol);
-  --color-acento: var(--accent);
-  --color-acento-fg: var(--accent-fg);
-  --color-card: var(--card);
-  --color-muted: var(--muted);
-  --color-edge: var(--edge);
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-cal);
+    color: var(--color-basalto);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-tezontle);
+    outline-offset: 3px;
+  }
+  .sobre-oscuro :focus-visible {
+    outline-color: var(--color-cal);
+  }
+  [id] {
+    scroll-margin-top: 4.5rem;
+  }
 }
 
-.js :is(
-    #casos .grid > div:first-child,
-    #casos a,
-    #proceso h2,
-    #proceso li,
-    #contacto .grid > div:first-child,
-    #contacto form
-  ) {
-  opacity: 0;
+@layer components {
+  /* Contenedor: bordes izquierdo y derecho iguales en todo el sitio */
+  .wrap {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .wrap { padding-inline: 3rem; }
+  }
+  @media (min-width: 1280px) {
+    .wrap { padding-inline: 5rem; }
+  }
+
+  .seccion {
+    padding-block: 6rem 4rem;
+  }
+  @media (min-width: 1024px) {
+    .seccion { padding-block: 7.5rem 6rem; }
+  }
+
+  .etiqueta {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-tinta-2);
+  }
+  .sobre-oscuro .etiqueta { color: var(--color-valle-tinta); }
+
+  .titulo-2 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(2.25rem, 1.55rem + 2.3vw, 3.75rem);
+    line-height: 1.04;
+    letter-spacing: -0.012em;
+  }
+
+  /* Botones: un primario lleno (tezontle) y un secundario con borde */
+  .btn {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    border-radius: 0.5rem;
+    padding-inline: 1.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 160ms var(--ease-oficio), background-color 160ms, color 160ms, border-color 160ms;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  .btn-primario {
+    background: var(--color-tezontle);
+    color: var(--color-cal);
+  }
+  .btn-primario:hover { background: var(--color-tezontle-2); }
+  .btn-secundario {
+    border: 1px solid currentColor;
+    color: inherit;
+  }
+  .btn-secundario:hover { background: rgb(22 21 15 / 0.05); }
+  .sobre-oscuro .btn-secundario:hover { background: rgb(243 240 232 / 0.08); }
+
+  /* Enlace de texto: subrayado que se dibuja */
+  .enlace {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 220ms var(--ease-oficio);
+  }
+  .enlace:hover { background-size: 0% 1px; background-position: 100% 100%; }
+
+  /* Formularios */
+  .campo-etiqueta {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.375rem;
+  }
+  .campo {
+    display: block;
+    width: 100%;
+    min-height: 3rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(22 21 15 / 0.32);
+    background: #fbfaf6;
+    padding: 0.625rem 0.875rem;
+    font-size: 1rem;
+    color: var(--color-basalto);
+    transition: border-color 160ms;
+  }
+  .campo:hover { border-color: rgb(22 21 15 / 0.55); }
+  .campo[aria-invalid="true"] { border-color: var(--color-tezontle); }
+  .campo-ayuda {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--color-tinta-2);
+  }
+  .campo-error {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-tezontle-2);
+  }
+  .campo-error:empty { display: none; }
+
+  /* Selector segmentado (radios) */
+  .segmentado {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0.25rem;
+    border-radius: 0.625rem;
+    background: var(--color-cal-2);
+    padding: 0.25rem;
+  }
+  .segmentado label {
+    position: relative;
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 160ms, color 160ms;
+  }
+  /* El radio cubre su etiqueta sin pintarse; su propio anillo de foco sí se ve
+     (no depende de :has(), así funciona también en navegadores antiguos). */
+  .segmentado input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+  .segmentado input:focus-visible {
+    outline: 2px solid var(--color-tezontle);
+    outline-offset: 2px;
+  }
+  .segmentado label:has(input:checked) {
+    background: var(--color-basalto);
+    color: var(--color-cal);
+  }
+
+  /* Tarjeta: una sola receta en todo el sitio */
+  .tarjeta {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-linea);
+    background: #f8f6f0;
+  }
+  a.tarjeta {
+    transition: transform 200ms var(--ease-oficio), border-color 200ms;
+  }
+  a.tarjeta:hover { transform: translateY(-2px); border-color: rgb(22 21 15 / 0.3); }
+}
+
+/* Entrada del hero: solo CSS, el contenido es visible aunque falle JavaScript */
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+[data-enter] > * {
+  animation: entrar 700ms var(--ease-oficio) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
     animation: none !important;
+    transition: none !important;
   }
 }

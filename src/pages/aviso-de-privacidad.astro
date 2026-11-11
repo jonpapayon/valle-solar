@@ -1,0 +1,70 @@
+---
+/**
+ * Aviso de privacidad — BORRADOR describiendo el funcionamiento real del sitio.
+ * PENDIENTE: revisión legal, razón social y domicilio del responsable (LFPDPPP).
+ */
+import Base from "../layouts/Base.astro";
+import { empresa } from "../data/empresa";
+---
+
+<Base
+  title={`Aviso de privacidad | ${empresa.nombre}`}
+  description={`Cómo trata ${empresa.nombre} los datos que compartes al pedir una cotización por WhatsApp.`}
+>
+  <article class="seccion">
+    <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-8">
+      <header class="lg:col-span-4">
+        <p class="etiqueta">Legal</p>
+        <h1 class="titulo-2 mt-4">Aviso de privacidad</h1>
+        <p class="etiqueta mt-6">Actualizado el 10 de noviembre de 2026</p>
+      </header>
+
+      <div class="max-w-[42rem] space-y-8 text-base leading-relaxed lg:col-span-7 lg:col-start-6 [&_h2]:font-serif [&_h2]:text-[1.75rem] [&_h2]:leading-tight [&_p]:mt-3 [&_p]:text-tinta-2">
+        <section>
+          <h2>Responsable</h2>
+          <p>
+            {empresa.nombre} es responsable del tratamiento de los datos personales que nos compartes. Para cualquier asunto
+            relacionado con tus datos escríbenos por WhatsApp al {empresa.whatsapp.visible}.
+          </p>
+        </section>
+        <section>
+          <h2>Qué datos tratamos</h2>
+          <p>
+            Este sitio no tiene formularios que envíen información a una base de datos ni a un correo. La calculadora y el
+            formulario de contacto solo preparan un mensaje que se abre en WhatsApp; tú decides si lo envías.
+          </p>
+          <p>
+            Si lo envías, recibimos lo que escribiste: por ejemplo tu nombre, municipio, tipo de inmueble, consumo e importe
+            de tu recibo, la fotografía del recibo si la compartes y tu número de WhatsApp.
+          </p>
+        </section>
+        <section>
+          <h2>Para qué los usamos</h2>
+          <p>
+            Para atender tu solicitud: responder tus dudas, estimar y cotizar un sistema fotovoltaico interconectado y, si
+            lo pides, programar una visita técnica. No vendemos ni cedemos tus datos.
+          </p>
+        </section>
+        <section>
+          <h2>Datos en tu navegador</h2>
+          <p>
+            Para que el formulario de contacto pueda incluir tu estimación, la calculadora la guarda temporalmente en el
+            almacenamiento de sesión de tu navegador. Se borra al cerrar la pestaña y no se envía a ningún servidor. El
+            sitio no usa cookies de seguimiento ni herramientas de analítica.
+          </p>
+        </section>
+        <section>
+          <h2>Tus derechos</h2>
+          <p>
+            Puedes pedir acceso, rectificación, cancelación u oposición al tratamiento de tus datos, o revocar tu
+            consentimiento, escribiéndonos por WhatsApp al {empresa.whatsapp.visible}.
+          </p>
+        </section>
+        <section>
+          <h2>Cambios a este aviso</h2>
+          <p>Publicaremos cualquier cambio en esta misma página, con su fecha de actualización.</p>
+        </section>
+      </div>
+    </div>
+  </article>
+</Base>

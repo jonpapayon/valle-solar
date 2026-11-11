@@ -1,0 +1,47 @@
+---
+/**
+ * Motivo de marca: perfil de un valle con cerros en línea fina y un sol.
+ * Es un ornamento estático (aria-hidden); no representa un lugar concreto.
+ */
+interface Props {
+  tono?: "claro" | "oscuro";
+  class?: string;
+}
+const { tono = "claro", class: clase = "" } = Astro.props;
+const trazo = tono === "claro" ? "#16150f" : "#f3f0e8";
+---
+
+<div class:list={["perfil-valle pointer-events-none select-none", clase]} aria-hidden="true">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="block h-[72px] w-full sm:h-[96px] lg:h-[120px]">
+    <g fill="none" stroke={trazo} stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke">
+      <path
+        d="M0 104 C120 96 170 58 260 62 C340 66 380 92 470 88 C560 84 610 40 720 36 C820 32 880 78 980 82 C1080 86 1120 52 1210 50 C1300 48 1360 80 1440 86"
+        stroke-opacity="0.55"
+        stroke-width="1.25"
+        vector-effect="non-scaling-stroke"></path>
+      <path
+        d="M0 112 C140 108 220 84 330 86 C450 88 520 106 640 104 C760 102 830 74 960 76 C1090 78 1170 100 1300 102 C1360 103 1400 104 1440 106"
+        stroke-opacity="0.3"
+        stroke-width="1"
+        vector-effect="non-scaling-stroke"></path>
+      <path d="M0 119.5 H1440" stroke-opacity="0.18" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+    </g>
+  </svg>
+  <span class="sol"></span>
+</div>
+
+<style>
+  .perfil-valle {
+    position: relative;
+  }
+  .sol {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -115%);
+    width: clamp(14px, 1.6vw, 22px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #c2410c;
+  }
+</style>
